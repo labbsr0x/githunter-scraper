@@ -1,0 +1,22 @@
+{
+  "name": "githunter-crawler",
+  "version": "1.0.0",
+  "description": "Crawler some Git Webpages",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://afa999b83491cbeac3fb51003ad5b94abcdb0e6f@github.com/labbsr0x/githunter-crawler.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/labbsr0x/githunter-crawler/issues"
+  },
+  "homepage": "https://github.com/labbsr0x/githunter-crawler#readme",
+  "dependencies": {
+    "crawler": "^1.2.2"
+  }
+}
