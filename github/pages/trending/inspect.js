@@ -3,10 +3,8 @@
 const c = require("../crawler");
 const repositoryCodePage = require("../repository/code/inspect");
 const repositoryIssuesPage = require("../repository/issues/inspect");
-const Data = require("../../data/data");
-
-// const repoPage
 const config = require("./config");
+// const Mongo = require("../../../mongo/Mongo");
 
 const init = () => {
   c.queue({
@@ -25,12 +23,18 @@ const callback = (error, res, done) => {
   const articles = $("article>h1>a");
   console.log(articles.length);
   for (const key in articles) {
-    // create mongo (use ID) -> if needed
+    // Getting all repos in trending page
     const item = articles[key];
+
     if (item && item.attribs && item.attribs.href) {
-      Data.setName(item.attribs.href, item.attribs.href);
-      repositoryCodePage(config.url + item.attribs.href, item.attribs.href);
-      repositoryIssuesPage(config.url + item.attribs.href, item.attribs.href);
+      //Getting id for database
+      const id = item.attribs.href; //Mongo.createDoc(item.attribs.href);
+
+      //Saving name
+      // Mongo.update(id, "name", item.attribs.href);
+
+      repositoryCodePage(config.url + item.attribs.href, id);
+      repositoryIssuesPage(config.url + item.attribs.href, id);
     }
   }
   done();

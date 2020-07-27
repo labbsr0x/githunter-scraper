@@ -1,7 +1,7 @@
 "use strict";
 
 const c = require("../../crawler");
-const Data = require("../../../data/data");
+// const Mongo = require("../../../../mongo/Mongo");
 
 const init = (url, identifier) => {
   c.queue({
@@ -20,26 +20,37 @@ const callback = (error, res, done, id) => {
   }
   var $ = res.$;
 
-  Data.setAbout(id, $("p.f4.mt-3").text());
-  Data.setContributorsQuantity($("span.Counter").text());
+  const values  = [];
+  values["about"] = $("p.f4.mt-3").text();
+  values["contributorsQuantity"] = $("main#js-repo-pjax-container div:nth-child(4) > div > h2 > a > span").text();
 
   const topics = $("a.topic-tag.topic-tag-link");
+  values["topics"] = [];
   for (let i=0; i < topics.length; i++) {
-    Data.addTopic(id, $(topics[i]).text().trim());
+    values["topics"].push($(topics[i]).text().trim());
   }
 
   const languages = $("span.text-gray-dark.text-bold.mr-1");
+  values["languages"] = [];
   for (let i=0; i < languages.length; i++) {
     const item = $(languages[i]);
     const theLanguage = {
       name: item.text(),
       percent: item.next().text()
     }
-    Data.addLanguage(id, theLanguage);
+    values["languages"].push(theLanguage)
   }
   
   //update mongo
+  save(id, values);
+
   done();
 };
+
+const save = (id, values) => {
+  // for (const field in values) {
+  //   Mongo.update(id, field, values[field]);
+  // }
+}
 
 module.exports = init;
