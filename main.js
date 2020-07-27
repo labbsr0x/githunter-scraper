@@ -14,11 +14,11 @@ if (process.argv[2]) {
   return;
 }
 
-switch (provider) {
-  case knownProviders[0]:
-    require("./github/github.startup")();
-    break;
-
-  default:
-    break;
+if (!knownProviders.includes(provider)){
+  console.log(`Unknown Provider: ${provider}`);
+  console.log(`\tKnowns providers: ${knownProviders.join(" | ")}`);
+  return;
 }
+
+const theProvider = require(`./${provider}/startup`);
+theProvider.run();

@@ -1,5 +1,5 @@
 # GitHunter-Crawler
-The objective this tool is basically search good issues for resolve on trending repositories.
+The objective this tool is to feed a Mongo database with public information of some repositories hosted in GitHub, Gitlab and others providers.
 
 ## Install
 After clone repository, write this command in terminal:

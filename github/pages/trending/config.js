@@ -1,6 +1,8 @@
 'use strict';
 
+const config = require("../../config");
+
 module.exports = {
-    url: "https://github.com",
+    ...config,
     path: "/trending"
 }

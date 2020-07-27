@@ -1,7 +1,6 @@
 "use strict";
 
 const Crawler = require("crawler");
-const Data = require("../data/data");
 
 const defaultCallback = (error, res, done) => {
   if (error) {
@@ -19,9 +18,7 @@ const c = new Crawler({
 
 // Trigger when became empty
 c.on("drain", () => {
-  console.log(Data.toJSON());
-  Data.clear();
-  console.log(Data.data);
+  console.log("Empty queue. Process ran successfully.")
 });
 
 module.exports = c;
