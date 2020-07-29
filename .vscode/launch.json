@@ -6,7 +6,7 @@
     "configurations": [
         {
             "type": "node",
-            "runtimeVersion": "13.1.0",
+            "runtimeVersion": "12.14.1",
             "request": "launch",
             "name": "Github - Launch Program",
             "skipFiles": [
