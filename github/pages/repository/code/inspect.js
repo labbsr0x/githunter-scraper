@@ -1,6 +1,7 @@
 "use strict";
 
 const c = require("../../crawler");
+const repoRepository = require("../../../../database/repositories/RepoRepository")
 // const Mongo = require("../../../../mongo/Mongo");
 
 const init = (url, identifier) => {
@@ -20,26 +21,26 @@ const callback = (error, res, done, id) => {
   }
   var $ = res.$;
 
-  const values  = [];
+  const values  = {};
   values["about"] = $("p.f4.mt-3").text();
   values["contributorsQuantity"] = $("main#js-repo-pjax-container div:nth-child(4) > div > h2 > a > span").text();
 
-  const topics = $("a.topic-tag.topic-tag-link");
-  values["topics"] = [];
-  for (let i=0; i < topics.length; i++) {
-    values["topics"].push($(topics[i]).text().trim());
-  }
+  // const topics = $("a.topic-tag.topic-tag-link");
+  // values["topics"] = [];
+  // for (let i=0; i < topics.length; i++) {
+  //   values["topics"].push($(topics[i]).text().trim());
+  // }
 
-  const languages = $("span.text-gray-dark.text-bold.mr-1");
-  values["languages"] = [];
-  for (let i=0; i < languages.length; i++) {
-    const item = $(languages[i]);
-    const theLanguage = {
-      name: item.text(),
-      percent: item.next().text()
-    }
-    values["languages"].push(theLanguage)
-  }
+  // const languages = $("span.text-gray-dark.text-bold.mr-1");
+  // values["languages"] = [];
+  // for (let i=0; i < languages.length; i++) {
+  //   const item = $(languages[i]);
+  //   const theLanguage = {
+  //     name: item.text(),
+  //     percent: item.next().text()
+  //   }
+  //   values["languages"].push(theLanguage)
+  // }
   
   //update mongo
   save(id, values);
@@ -47,10 +48,8 @@ const callback = (error, res, done, id) => {
   done();
 };
 
-const save = (id, values) => {
-  // for (const field in values) {
-  //   Mongo.update(id, field, values[field]);
-  // }
+const save = async (id, values) => {
+  const doc = await repoRepository.findOneAndUpdate({ _id: id }, values);
 }
 
 module.exports = init;
