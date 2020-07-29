@@ -5,7 +5,7 @@ const repositoryCodePage = require("../repository/code/inspect");
 const repositoryIssuesPage = require("../repository/issues/inspect");
 
 const config = require("./config");
-// const Mongo = require("../../../mongo/Mongo");
+const repoRepository = require("../../../database/repositories/RepoRepository");
 
 const init = () => {
   c.queue({
@@ -29,10 +29,7 @@ const callback = (error, res, done) => {
 
     if (item && item.attribs && item.attribs.href) {
       //Getting id for database
-      const id = item.attribs.href; //Mongo.createDoc(item.attribs.href);
-
-      //Saving name
-      // Mongo.update(id, "name", item.attribs.href);
+      const { id } = await repoRepository.findOrCreate({ name: item.attribs.href });
 
       repositoryCodePage(config.url + item.attribs.href, id);
       repositoryIssuesPage(config.url + item.attribs.href, id);

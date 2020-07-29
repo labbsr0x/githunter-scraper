@@ -1,7 +1,9 @@
 "use strict";
 
 const c = require("../../crawler");
+const repoRepository = require("../../../../database/repositories/RepoRepository")
 const repositoryCommitsPage = require("../commits/inspect");
+
 // const Mongo = require("../../../../mongo/Mongo");
 
 const init = (url, identifier) => {
@@ -122,10 +124,8 @@ const callback = (error, res, done, id) => {
   done();
 };
 
-const save = (id, values) => {
-  // for (const field in values) {
-  //   Mongo.update(id, field, values[field]);
-  // }
+const save = async (id, values) => {
+  const doc = await repoRepository.findOneAndUpdate({ _id: id }, values);
 }
 
 module.exports = init;

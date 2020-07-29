@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/labbsr0x/githunter-crawler#readme",
   "dependencies": {
-    "crawler": "^1.2.2"
+    "crawler": "^1.2.2",
+    "mongoose": "^5.9.25"
   }
 }
