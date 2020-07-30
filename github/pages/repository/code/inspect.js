@@ -26,7 +26,7 @@ const callback = (error, res, done, id) => {
   const values  = {};
 
   //count watches
-  var rawCountWatches = $("ul.pagehead-actions.flex-shrink-0 > li:nth-last-child(3)")[0].children[3].attribs;;
+  var rawCountWatches = $("ul.pagehead-actions.flex-shrink-0 > li:nth-last-child(3)")[0].children[3].attribs;
   values["watchers"] = Object.values(rawCountWatches)[2].replace(/[ A-Za-z]/g, "");
 
   //count starts
@@ -104,7 +104,7 @@ const callback = (error, res, done, id) => {
   const languages = $("span.text-gray-dark.text-bold.mr-1");
   if(languages.length) {
     values["languages"] = [];
-    for (let i=0; i < languages.length; i++) {
+    for(let i = 0; i < languages.length; i++) {
       const item = $(languages[i]);
       const theLanguage = {
         name: item.text(),
@@ -119,7 +119,7 @@ const callback = (error, res, done, id) => {
 
   //get path branch default commits
   const path = $("a.pl-3.pr-3.py-3.p-md-0.mt-n3.mb-n3.mr-n3.m-md-0.link-gray-dark.no-underline.no-wrap")[0];
-  //repositoryCommitsPage(path.attribs.href, id);
+  repositoryCommitsPage(path.attribs.href, id);
 
   done();
 };
