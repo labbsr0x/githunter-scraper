@@ -9,7 +9,7 @@ class RepoRepository extends BaseRepository {
   async findOrCreate(body){
     const results = await this.findByName(body["name"]);
 
-    if(results && results != null){
+    if(results && results.length){
       return results[0]
     } 
 

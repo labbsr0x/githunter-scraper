@@ -13,6 +13,19 @@ const repoSchema = new Schema({
   },
   contributorsQuantity: {
     type: Number
+  },
+  pulls: { 
+    open: Number, 
+    closed: Number,
+    lastPullOpened: Date,
+    lastPullClosed: Date,
+    list: [
+      {
+        pullNumber: String,
+        openDatetime: Date,
+        closedDatetime: Date,
+      }
+    ]
   }
 }, {timestamps: true});
 

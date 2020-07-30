@@ -37,7 +37,7 @@ class ManageDB {
     this.logger.debug('Connected to the database');
   }
 
-  static async close(){
+   async close(){
     this.logger.debug('Closing database...');
 
     await mongoose.connection.close().catch(error => {
@@ -49,4 +49,15 @@ class ManageDB {
   }
 }
 
-module.exports = ManageDB;
+let db;
+const connectDB = () => {
+  db = new ManageDB({config: 'mongodb://localhost:27017/githunter-crawler', logger: console });
+  return db.connect();
+} 
+
+const disconectDB = () => {
+  if (db)
+    db.close();
+} 
+
+module.exports = {connectDB, disconectDB};
