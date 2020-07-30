@@ -14,7 +14,7 @@ const init = () => {
   });
 };
 
-const callback = (error, res, done) => {
+const callback = async (error, res, done) => {
   if (error) {
     console.log(error);
     done();
