@@ -44,6 +44,19 @@ const repoSchema = new Schema({
   contributorsQuantity: {
     type: Number
   },
+  pulls: { 
+    open: Number, 
+    closed: Number,
+    lastPullOpened: Date,
+    lastPullClosed: Date,
+    list: [
+      {
+        pullNumber: String,
+        openDatetime: Date,
+        closedDatetime: Date,
+      }
+    ]
+  },
   url: {
     type: String
   },
@@ -52,8 +65,6 @@ const repoSchema = new Schema({
   },
   topics: [String],
   languages: [language]
-  //commits
-  //issues
 }, {timestamps: true});
 
 module.exports = mongoose.model('repoCollection', repoSchema);

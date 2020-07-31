@@ -6,7 +6,6 @@
     "configurations": [
         {
             "type": "node",
-            "runtimeVersion": "12.14.1",
             "request": "launch",
             "name": "Github - Launch Program",
             "skipFiles": [
@@ -19,7 +18,6 @@
         },
         {
             "type": "node",
-            "runtimeVersion": "13.1.0",
             "request": "launch",
             "name": "Gitlab - Launch Program",
             "skipFiles": [

@@ -19,6 +19,19 @@ const callback = (error, res, done, id) => {
     done();
     return;
   }
+
+  if (res && res.statusCode != 200) {
+    console.log(`Error requesting page: ${res.options.uri}, Status Code: ${res.statusCode}`);
+
+    if (res.statusCode == 429) {
+        res.options.updateProxy = true;
+        c._schedule(res.options);
+    }
+
+    done();
+    return;
+  }
+
   var $ = res.$;
 
   const values  = {};
@@ -41,7 +54,7 @@ const callback = (error, res, done, id) => {
 
   //last commit
   const rawLastCommitTime = $("relative-time")[0];
-  if(rawLastCommitTime.attribs !== "undefined") {
+  if(rawLastCommitTime && rawLastCommitTime.attribs !== "undefined") {
     values["lastCommitTime"]  = rawLastCommitTime.attribs.datetime;
   }
 
@@ -120,7 +133,9 @@ const callback = (error, res, done, id) => {
 
   //get path branch default commits
   const path = $("a.pl-3.pr-3.py-3.p-md-0.mt-n3.mb-n3.mr-n3.m-md-0.link-gray-dark.no-underline.no-wrap")[0];
-  repositoryCommitsPage(path.attribs.href, id);
+
+  if (path && path.attribs && path.attribs.href)
+    repositoryCommitsPage(path.attribs.href, id);
 
   done();
 };
