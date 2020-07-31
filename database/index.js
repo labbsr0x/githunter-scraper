@@ -23,8 +23,9 @@ class ManageDB {
 
     this.logger.debug('Connecting to the database...');
 
-    //mongoose.set('useCreateIndex', true);
+    mongoose.set('useCreateIndex', true);
     mongoose.set('useFindAndModify', false);
+    mongoose.set('useUnifiedTopology', true);
     //mongoose.set('debug', true);
 
     await mongoose

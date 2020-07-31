@@ -4,8 +4,6 @@ const c = require("../../crawler");
 const repoRepository = require("../../../../database/repositories/RepoRepository")
 const repositoryCommitsPage = require("../commits/inspect");
 
-// const Mongo = require("../../../../mongo/Mongo");
-
 const init = (url, identifier) => {
   c.queue({
     uri: url,
@@ -48,7 +46,8 @@ const callback = (error, res, done, id) => {
   }
 
   //count commits
-  values["commitsQuantity"] = $("li.ml-0.ml-md-3 > a > span > strong").text();
+  const commitsQuantity = $("li.ml-0.ml-md-3 > a > span > strong").text();
+  values["commitsQuantity"] = formatStringToNumber(commitsQuantity);
 
   //about
   var rawAbout = $("p.f4.mt-3").text();
@@ -90,11 +89,13 @@ const callback = (error, res, done, id) => {
       if(rawReleaseContributors[i] !== "undefined") {
         //have release? how many?
         if(rawReleaseContributors[i].attribs.href.includes("releases") && rawReleaseContributors[i].children.length > 1) {
-          values["releases"] = rawReleaseContributors[i].children[1].attribs.title;
+          const releasesQuantity = rawReleaseContributors[i].children[1].attribs.title;
+          values["releases"] = formatStringToNumber(releasesQuantity);
         }
         //have contributor? how many?
         if(rawReleaseContributors[i].attribs.href.includes("contributors")) {
-          values["contributorsQuantity"] = rawReleaseContributors[i].children[1].attribs.title;
+          const contributorsQuantity = rawReleaseContributors[i].children[1].attribs.title;
+          values["contributorsQuantity"] = formatStringToNumber(contributorsQuantity);
         }
       }
     }
@@ -124,8 +125,14 @@ const callback = (error, res, done, id) => {
   done();
 };
 
+const formatStringToNumber = (str) => {
+  return str.replace(',', '');
+}
+
 const save = async (id, values) => {
+  console.log(values)
   const doc = await repoRepository.findOneAndUpdate({ _id: id }, values);
+  //console.log(doc)
 }
 
 module.exports = init;

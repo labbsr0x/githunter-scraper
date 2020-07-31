@@ -22,15 +22,19 @@ if (!knownProviders.includes(provider)){
 }
 
 try {
-  connectDB();
+  connectDB().then(
+    run()
+  );
 } catch (error) {
   console.log(error);
 }
 
-const theProvider = require(`./${provider}/startup`);
-theProvider.run();
+function run(){
+  const theProvider = require(`./${provider}/startup`);
+  theProvider.run();
+}
 
-function connectDB() {
+async function connectDB() {
   const Database = require('./database')
   const db = new Database({config: 'mongodb://localhost:27017/githunter-crawler', logger: console });
   db.connect();
