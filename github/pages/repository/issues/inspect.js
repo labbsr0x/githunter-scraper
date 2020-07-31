@@ -36,13 +36,13 @@ const callback = (error, res, done, id) => {
   let open = $("div#js-issues-toolbar a.btn-link.selected").text().trim();
   open = open.split(" ");
   values["open"] = open[0];
-  console.log(`${id} -> open issues: ${values["open"]}`);
+  //console.log(`${id} -> open issues: ${values["open"]}`);
 
   let closed = $("div#js-issues-toolbar div.flex-auto.d-none.d-lg-block.no-wrap > div > a:nth-child(2)").text().trim();
   closed = closed.split(" ");
   values["closed"] = closed[0];
   
-  console.log(`${id} -> closed issues: ${values["closed"]}`);
+  //console.log(`${id} -> closed issues: ${values["closed"]}`);
   done();
 };
 

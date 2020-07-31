@@ -21,7 +21,6 @@ if (!knownProviders.includes(provider)){
   return;
 }
 
-
 const main = async () => {
   try {
     await connectDB();

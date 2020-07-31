@@ -4,8 +4,6 @@ const c = require("../../crawler");
 const repoRepository = require("../../../../database/repositories/RepoRepository")
 const repositoryCommitsPage = require("../commits/inspect");
 
-// const Mongo = require("../../../../mongo/Mongo");
-
 const init = (url, identifier) => {
   c.queue({
     uri: url,
@@ -39,7 +37,7 @@ const callback = (error, res, done, id) => {
   const values  = {};
 
   //count watches
-  var rawCountWatches = $("ul.pagehead-actions.flex-shrink-0 > li:nth-last-child(3)")[0].children[3].attribs;;
+  var rawCountWatches = $("ul.pagehead-actions.flex-shrink-0 > li:nth-last-child(3)")[0].children[3].attribs;
   values["watchers"] = Object.values(rawCountWatches)[2].replace(/[ A-Za-z]/g, "");
 
   //count starts
@@ -61,7 +59,8 @@ const callback = (error, res, done, id) => {
   }
 
   //count commits
-  values["commitsQuantity"] = $("li.ml-0.ml-md-3 > a > span > strong").text();
+  const commitsQuantity = $("li.ml-0.ml-md-3 > a > span > strong").text();
+  values["commitsQuantity"] = formatStringToNumber(commitsQuantity);
 
   //about
   var rawAbout = $("p.f4.mt-3").text();
@@ -103,11 +102,13 @@ const callback = (error, res, done, id) => {
       if(rawReleaseContributors[i] !== "undefined") {
         //have release? how many?
         if(rawReleaseContributors[i].attribs.href.includes("releases") && rawReleaseContributors[i].children.length > 1) {
-          values["releases"] = rawReleaseContributors[i].children[1].attribs.title;
+          const releasesQuantity = rawReleaseContributors[i].children[1].attribs.title;
+          values["releases"] = formatStringToNumber(releasesQuantity);
         }
         //have contributor? how many?
         if(rawReleaseContributors[i].attribs.href.includes("contributors")) {
-          values["contributorsQuantity"] = rawReleaseContributors[i].children[1].attribs.title;
+          const contributorsQuantity = rawReleaseContributors[i].children[1].attribs.title;
+          values["contributorsQuantity"] = formatStringToNumber(contributorsQuantity);
         }
       }
     }
@@ -117,7 +118,7 @@ const callback = (error, res, done, id) => {
   const languages = $("span.text-gray-dark.text-bold.mr-1");
   if(languages.length) {
     values["languages"] = [];
-    for (let i=0; i < languages.length; i++) {
+    for(let i = 0; i < languages.length; i++) {
       const item = $(languages[i]);
       const theLanguage = {
         name: item.text(),
@@ -132,14 +133,21 @@ const callback = (error, res, done, id) => {
 
   //get path branch default commits
   const path = $("a.pl-3.pr-3.py-3.p-md-0.mt-n3.mb-n3.mr-n3.m-md-0.link-gray-dark.no-underline.no-wrap")[0];
+
   if (path && path.attribs && path.attribs.href)
     repositoryCommitsPage(path.attribs.href, id);
 
   done();
 };
 
+const formatStringToNumber = (str) => {
+  return str.replace(',', '');
+}
+
 const save = async (id, values) => {
+  console.log(values)
   const doc = await repoRepository.findOneAndUpdate({ _id: id }, values);
+  //console.log(doc)
 }
 
 module.exports = init;
