@@ -10,10 +10,24 @@ npm install
 ## Run
 **First, make sure your node version is v10 or higher if not, upgrade to a newer version.**
 
-After, in the root directory write the command to run:
+### There are 2 differet way to run the application
+
+- Run as server
 ```bash
-node main github
+node githunter-scraper.js --server
 ```
+
+> For future, the Conductor will consumer some endpoints to manage the process.
+
+- Run as command line process
+```bash
+node githunter-scraper.js --scraperPoint trending --provider github --nodes issuesV1
+```
+> ***scraperPoint*** (required): It is the start point, from where the script should get the repositories to be scraper. For _trending_  means that will crawl the github explore page, in trending tab.  
+>   
+> ***provider*** (required): Where should read all information.  
+>   
+> ***nodes*** (optional): Which king of information should read. Known nodes are: repository, issues, pulls and commits
 
 ## License
 [MIT](https://choosealicense.com/licenses/mit/)
