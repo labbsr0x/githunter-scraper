@@ -11,9 +11,14 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/main.js",
+            "program": "${workspaceFolder}/githunter-scraper.js",
             "args": [
-                "github"
+                "--scraperPoint",
+                "trending",
+                "--provider",
+                "github",
+                "--nodes",
+                "issuesV1"
             ]
         },
         {
@@ -23,10 +28,25 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
-            "program": "${workspaceFolder}/main.js",
+            "program": "${workspaceFolder}/githunter-scraper.js",
             "args": [
+                "--scraperPoint",
+                "trending",
+                "--provider",
                 "gitlab"
             ]
-        }
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Server - Launch Program",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${workspaceFolder}/githunter-scraper.js",
+            "args": [
+                "--server"
+            ]
+        },
     ]
 }

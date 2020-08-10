@@ -2,7 +2,7 @@
   "name": "githunter-crawler",
   "version": "1.0.0",
   "description": "Crawler some Git Webpages",
-  "main": "main.js",
+  "main": "githunter-scraper.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,7 +17,15 @@
   },
   "homepage": "https://github.com/labbsr0x/githunter-crawler#readme",
   "dependencies": {
+    "axios": "^0.19.2",
+    "config": "^3.3.1",
+    "cors": "^2.8.5",
     "crawler": "^1.2.2",
-    "mongoose": "^5.9.25"
+    "express": "^4.17.1",
+    "json-mapper": "0.0.12",
+    "moment": "^2.27.0",
+    "mongoose": "^5.9.25",
+    "qs": "^6.9.4",
+    "route-parser": "0.0.5"
   }
 }
