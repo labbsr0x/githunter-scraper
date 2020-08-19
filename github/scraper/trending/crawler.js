@@ -1,7 +1,6 @@
 "use strict";
 
 const Crawler = require("crawler");
-const database = require("../../../database");
 
 const defaultCallback = (error, res, done) => {
   if (error) {
