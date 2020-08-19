@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const configuration = require("config");
 
 class ManageDB {
   constructor({config, logger}){
@@ -9,8 +10,8 @@ class ManageDB {
   async connect(){
     let credentials = '';
 
-    if(this.config.auth){
-      credentials = `${this.config.user}:${this.config.password}@` 
+    if(this.config.credentials && this.config.credentials.user && this.config.credentials.password){
+      credentials = `${this.config.credentials.user}:${this.config.credentials.password}@` 
     }
 
     const connection = typeof this.config === 'string'
@@ -51,8 +52,13 @@ class ManageDB {
 }
 
 let db;
-const connectDB = () => {
-  db = new ManageDB({config: 'mongodb://localhost:27017/githunter-crawler', logger: console });
+const connectDB = (config = false) => {
+
+  if (!config){
+    config = configuration.get('mongo');
+  }
+
+  db = new ManageDB({config, logger: console });
   return db.connect();
 } 
 

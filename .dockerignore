@@ -1,0 +1,4 @@
+node_modules
+
+startDocker.sh
+stopDocker.sh
