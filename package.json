@@ -4,7 +4,8 @@
   "description": "Crawler some Git Webpages",
   "main": "githunter-scraper.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint --fix . --ext .js"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   "homepage": "https://github.com/labbsr0x/githunter-crawler#readme",
   "dependencies": {
     "axios": "^0.19.2",
+    "body-parser": "^1.19.0",
     "config": "^3.3.1",
     "cors": "^2.8.5",
     "crawler": "^1.2.2",

@@ -1,28 +1,29 @@
 const mongoose = require('mongoose');
+
 const { Schema } = mongoose;
 
-
-const repoSchema = new Schema({
-  name: {
-    type: String
-  },
-  owner: {
-    type: String
-  },
-  about: {
-    type: String
-  },
-  license: {
-    type: String
-  },
-  url: {
-    type: String
-  },
-  topics: [String]
+const repoSchema = new Schema(
+  {
+    name: {
+      type: String,
+    },
+    owner: {
+      type: String,
+    },
+    about: {
+      type: String,
+    },
+    license: {
+      type: String,
+    },
+    url: {
+      type: String,
+    },
+    topics: [String],
   },
   {
-    timestamps: true
-  }
+    timestamps: true,
+  },
 );
 
 module.exports = mongoose.model('repositoryCollection', repoSchema);

@@ -10,11 +10,16 @@
     "SharedArrayBuffer": "readonly"
   },
   "parserOptions": {
-    "ecmaVersion": 2018
+    "ecmaVersion": 2018,
+    "ecmaFeatures": {
+      "globalReturn": true
+    }
   },
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "global-require": "warn"
+    "global-require": "warn",
+    "import/no-dynamic-require": 0,
+    "no-param-reassign": "off"
   }
 }

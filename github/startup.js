@@ -1,18 +1,16 @@
-'use strict';
-
-const trendingController = require("./scraper/trending/controller");
-const env = require("../env");
-
-const run = () => {
-    scraperMode[env.flags.scraperPoint]();
-}
+const trendingController = require('./scraper/trending/controller');
+const env = require('../env');
 
 const scraperByTrending = () => {
-    trendingController.run();
-}
+  trendingController.run();
+};
 
 const scraperMode = {
-    trending: scraperByTrending
-}
+  trending: scraperByTrending,
+};
 
-module.exports = {run};
+const run = () => {
+  scraperMode[env.flags.scraperPoint]();
+};
+
+module.exports = { run };
