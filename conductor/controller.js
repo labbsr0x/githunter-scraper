@@ -22,6 +22,7 @@ const controller = (req, res) => {
     return;
   }
 
+  // eslint-disable-next-line global-require
   const theProvider = require(`../${flags.provider}/startup`);
   theProvider.run();
 

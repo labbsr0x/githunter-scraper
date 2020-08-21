@@ -18,7 +18,6 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "global-require": "warn",
     "import/no-dynamic-require": 0,
     "no-param-reassign": "off"
   }

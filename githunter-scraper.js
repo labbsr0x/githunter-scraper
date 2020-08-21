@@ -1,6 +1,7 @@
 const server = require('./server/server');
 const Flags = require('./flags/Flags');
 const env = require('./env');
+const database = require('./database');
 
 const knownProviders = ['github', 'gitlab'];
 const knownScraperPoint = ['trending'];
@@ -47,14 +48,11 @@ if (!knownScraperPoint.includes(flags.scraperPoint)) {
   process.exit(0);
 }
 
-const connectDB = () => {
-  const database = require('./database');
-  return database.connectDB();
-};
-
 const scraper = async () => {
   try {
-    await connectDB();
+    await database.connectDB();
+
+    // eslint-disable-next-line global-require
     const theProvider = require(`./${flags.provider}/startup`);
     theProvider.run(flags);
   } catch (error) {

@@ -1,25 +1,24 @@
 const config = require('config');
 const express = require('express');
+const bodyParser = require('body-parser');
+const http = require('http');
+const cors = require('cors');
+
+const database = require('../database');
+const routers = require('./router');
 
 const configFeed = config.get('server');
 
 const initRoutes = async app => {
-  // Routers
-  const routers = require('./router');
   app.use(configFeed.baseDir, routers());
 };
 
 const configureApp = app => {
-  const bodyParser = require('body-parser');
-
   app.use(bodyParser.json());
-
-  const cors = require('cors');
   app.use(cors());
 };
 
 const startApp = app => {
-  const http = require('http');
   const server = http.createServer(app);
 
   server.listen(configFeed.port, configFeed.url, () => {
@@ -32,7 +31,6 @@ const startApp = app => {
 };
 
 const connectDB = () => {
-  const database = require('../database');
   return database.connectDB();
 };
 
