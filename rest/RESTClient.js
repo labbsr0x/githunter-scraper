@@ -10,7 +10,7 @@ class Http {
 
     this.service = axios.create({
       url,
-      timeout: 10000,
+      timeout: 120000,
       headers,
     });
 

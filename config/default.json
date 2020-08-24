@@ -18,16 +18,25 @@
     "githunter": {
         "url": "http://localhost:3001",
         "endpoints" : {
-            "repository": "/v1/repos",
+            "repository": "/v1/code",
             "commits": "/v1/commits",
             "pulls": "/v1/pulls",
             "issues": "/v1/issues"
         },
-        "rateLimit": {
-            "personalToken": [
-                "afa999b83491cbeac3fb51003ad5b94abcdb0e6f"
-            ],
-            "minLimit": 50
+        "github":{
+            "rateLimit": {
+                "personalToken": [
+                    "afa999b83491cbeac3fb51003ad5b94abcdb0e6f"
+                ],
+                "minLimit": 50
+            }
+        },
+        "gitlab":{
+            "rateLimit": {
+                "personalToken": [
+                    "7DysCHK25vQUQ_wWxom9"
+                ]
+            }
         }
     },
     "github": {

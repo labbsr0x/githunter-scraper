@@ -33,7 +33,9 @@
                 "--scraperPoint",
                 "trending",
                 "--provider",
-                "gitlab"
+                "gitlab",
+                "--nodes",
+                "pullsV12"
             ]
         },
         {
