@@ -1,11 +1,8 @@
-
-
-const env = ( () => {
-
-    return {
-        flags: {},
-        starwsAuth: {}
-    }
-});
+const env = () => {
+  return {
+    flags: {},
+    starwsAuth: {},
+  };
+};
 
 module.exports = env;

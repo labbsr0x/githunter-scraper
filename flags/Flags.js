@@ -1,55 +1,53 @@
-
-
 const defaultOptions = {
-    delimiter: "-",
-    requiredFlags: []
-}
+  delimiter: '-',
+  requiredFlags: [],
+};
 
 class Flags {
+  constructor(args, options = {}) {
+    this.args = args;
+    this.options = Object.assign(defaultOptions, options);
+  }
 
-    constructor (args, options = {}) {
-        this.args = args
-        this.options = Object.assign(defaultOptions, options);
-    }
+  parse() {
+    const flagsParsed = {};
+    const flags = this.args.filter(item => this.isFlag(item));
 
-    parse() {
-        const flagsParsed = {};
-        const flags = this.args.filter(item => this.isFlag(item));
-        
-        for (const theFlag of flags) {
-            const flagIndex = this.args.indexOf(theFlag);
-            let nextValue;
-            if (this.hasNextValue(this.args[flagIndex+1])) {
-                nextValue = this.args[flagIndex+1];
-                flagsParsed[this.removeTagNotation(theFlag)] = this.isFlag(nextValue)? true : nextValue;
-            } else {
-                flagsParsed[this.removeTagNotation(theFlag)] = true;
-            }
-            
-        }
-        return flagsParsed;
-    }
+    flags.forEach((theFlag, flagIndex) => {
+      let nextValue;
+      if (this.hasNextValue(this.args[flagIndex + 1])) {
+        nextValue = this.args[flagIndex + 1];
+        flagsParsed[this.removeTagNotation(theFlag)] = this.isFlag(nextValue)
+          ? true
+          : nextValue;
+      } else {
+        flagsParsed[this.removeTagNotation(theFlag)] = true;
+      }
+    });
 
-    isValid(flagsParsed) {
-        const exitingFlags = Object.keys(flagsParsed);
-        const difference = this.options.requiredFlags
-                                    .filter(x => !exitingFlags.includes(x));
-        return difference.length === 0;
-    }
+    return flagsParsed;
+  }
 
-    hasNextValue(value) {
-        return value;
-    }
+  isValid(flagsParsed) {
+    const exitingFlags = Object.keys(flagsParsed);
+    const difference = this.options.requiredFlags.filter(
+      x => !exitingFlags.includes(x),
+    );
+    return difference.length === 0;
+  }
 
-    isFlag(value) {
-        return value && value.startsWith(`${this.options.delimiter}`);
-    }
+  static hasNextValue(value) {
+    return value;
+  }
 
-    removeTagNotation (tag) {
-        const regex = new RegExp(`${this.options.delimiter}*`, 'g');
-        return tag.replace(regex, "");
-    }
+  isFlag(value) {
+    return value && value.startsWith(`${this.options.delimiter}`);
+  }
 
+  removeTagNotation(tag) {
+    const regex = new RegExp(`${this.options.delimiter}*`, 'g');
+    return tag.replace(regex, '');
+  }
 }
 
-module.exports = Flags
+module.exports = Flags;

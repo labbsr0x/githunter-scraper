@@ -1,11 +1,10 @@
-const BaseRepository = require('./BaseRepository')
-const Repo = require('../models/Repo')
+const BaseRepository = require('./BaseRepository');
+const Repo = require('../models/Repo');
 
 class RepoRepository extends BaseRepository {
-  constructor(){
+  constructor() {
     super(Repo);
   }
-
 }
 
 module.exports = new RepoRepository();
