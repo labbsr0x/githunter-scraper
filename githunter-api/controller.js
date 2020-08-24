@@ -60,7 +60,7 @@ const sendGetToGithunter = async (path, data) => {
     httpClient.addAccessToken(accessToken);
     data = {
       ...data,
-      accessToken,
+      access_token: accessToken,
     };
     const response = await httpClient.get(path, data);
 

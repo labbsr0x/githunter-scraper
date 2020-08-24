@@ -30,9 +30,9 @@ const callback = async (error, res, done) => {
   const repos = [];
   const articles = $('article>h1>a');
 
-  articles.forEach(key => {
+  Object.values(articles).forEach(item => {
     // Getting all repos in trending page
-    const item = articles[key];
+    // const item = articles[key];
 
     if (item && item.attribs && item.attribs.href) {
       // Getting id for database
