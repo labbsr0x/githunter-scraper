@@ -23,7 +23,7 @@ const readCommitInformation = async repo => {
 };
 
 const readPullsInformation = async (repo) => {
-    var issueMaker = JM.makeConverter({
+    var pullMaker = JM.makeConverter({
         dateTime: () => moment().format(),
         fields: {
             number: ["number", h.toString],
