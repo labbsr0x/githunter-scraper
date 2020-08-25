@@ -40,7 +40,7 @@ const getValidToken4Github = async () => {
 
   for (const token of personalTokenList) {
     const limits = await hasRateLimit(token);
-    if (limits && limits.remaining > gitHunterConfig[provider].rateLimit.minLimit) {
+    if (limits && limits.remaining > gitHunterConfig['github'].rateLimit.minLimit) {
       return token;
     }
   }
