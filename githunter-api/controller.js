@@ -36,7 +36,7 @@ const hasRateLimit = async accessToken => {
 
 const getValidToken4Github = async () => {
   const gitHunterConfig = config.get('githunter');
-  const personalTokenList = gitHunterConfig[provider].rateLimit.personalToken;
+  const personalTokenList = gitHunterConfig['github'].rateLimit.personalToken;
 
   for (const token of personalTokenList) {
     const limits = await hasRateLimit(token);
