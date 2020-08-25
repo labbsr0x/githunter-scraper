@@ -49,7 +49,7 @@ const getValidToken4Github = async () => {
 
 const getValidToken4Gitlab = () => {
   const gitHunterConfig = config.get('githunter');
-  const personalTokenList = gitHunterConfig[provider].rateLimit.personalToken;
+  const personalTokenList = gitHunterConfig['gitlab'].rateLimit.personalToken;
   const index = Math.floor(Math.random() * personalTokenList.length);
   return personalTokenList[index];
 };
