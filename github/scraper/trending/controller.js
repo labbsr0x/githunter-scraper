@@ -99,9 +99,11 @@ const readPullsInformation = async (repo) => {
     const normalizedData = [];
     const response = await githunterApi.getRepositoryPullsRequest(repo);
     if (!response) return;
-    for (const key in response.data) {
-        normalizedData.push(issueMaker({...response.data[key], ...repo}));
-    }
+    Object.keys(response.data).forEach(key => {
+        normalizedData.push({
+             ...pullMaker({...response.data[key], ...repo }),
+        });
+    });
     return normalizedData;
 };
 
