@@ -28,7 +28,7 @@ const callback = async (error, res, done) => {
 
   const { $ } = res;
   const repos = [];
-  const articles = $('article>h1>a');
+  const articles = $('li.project-row .project-title a');
 
   Object.values(articles).forEach(item => {
     // Getting all repos in trending page
@@ -37,7 +37,10 @@ const callback = async (error, res, done) => {
     if (item && item.attribs && item.attribs.href) {
       // Getting id for database
       const repo = item.attribs.href.split('/');
-      if (repo.length) repos.push({ owner: repo[1], name: repo[2] });
+      repo.shift(); // remove first white space
+      const owner = repo.shift();
+      const name = repo.join("/");
+      if (owner && name) repos.push({ owner, name });
     }
   });
 

@@ -13,7 +13,8 @@ const shortStringLen = 8;
 
 const readRepositoryInformation = async repo => {
   const repoInfo = await githunterApi.getRepositoryInformation(repo);
-  db.save(repoInfo);
+  if (repoInfo)
+    db.save(repoInfo);
 };
 
 const readCommitInformation = async repo => {
@@ -23,7 +24,7 @@ const readCommitInformation = async repo => {
 };
 
 const readPullsInformation = async (repo) => {
-    var pullMaker = JM.makeConverter({
+    var issueMaker = JM.makeConverter({
         dateTime: () => moment().format(),
         fields: {
             number: ["number", h.toString],
@@ -99,11 +100,9 @@ const readPullsInformation = async (repo) => {
     const normalizedData = [];
     const response = await githunterApi.getRepositoryPullsRequest(repo);
     if (!response) return;
-    Object.keys(response.data).forEach(key => {
-        normalizedData.push({
-             ...pullMaker({...response.data[key], ...repo }),
-        });
-    });
+    for (const key in response.data) {
+        normalizedData.push(issueMaker({...response.data[key], ...repo}));
+    }
     return normalizedData;
 };
 

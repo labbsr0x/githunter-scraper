@@ -34,22 +34,41 @@ const hasRateLimit = async accessToken => {
   }
 };
 
-const getValidToken = async () => {
+const getValidToken4Github = async () => {
   const gitHunterConfig = config.get('githunter');
-  const personalTokenList = gitHunterConfig.rateLimit.personalToken;
+  const personalTokenList = gitHunterConfig['github'].rateLimit.personalToken;
 
   for (const token of personalTokenList) {
     const limits = await hasRateLimit(token);
-    if (limits && limits.remaining > gitHunterConfig.rateLimit.minLimit) {
+    if (limits && limits.remaining > gitHunterConfig['github'].rateLimit.minLimit) {
       return token;
     }
   }
+  return null;
+};
 
+const getValidToken4Gitlab = () => {
+  const gitHunterConfig = config.get('githunter');
+  const personalTokenList = gitHunterConfig['gitlab'].rateLimit.personalToken;
+  const index = Math.floor(Math.random() * personalTokenList.length);
+  return personalTokenList[index];
+};
+
+const getValidToken = async (provider) => {
+  
+  switch (provider) {
+    case "github":
+      return await getValidToken4Github(provider);
+    case "gitlab":
+      return getValidToken4Gitlab(provider);
+    default:
+      break;
+  }
   return null;
 };
 
 const sendGetToGithunter = async (path, data) => {
-  const accessToken = await getValidToken();
+  const accessToken = await getValidToken(data.provider);
 
   if (!accessToken) {
     console.error('No token available for consume githunter API.');
@@ -60,7 +79,7 @@ const sendGetToGithunter = async (path, data) => {
     httpClient.addAccessToken(accessToken);
     data = {
       ...data,
-      accessToken,
+      access_token: accessToken,
     };
     const response = await httpClient.get(path, data);
 

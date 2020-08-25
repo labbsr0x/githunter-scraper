@@ -18,7 +18,7 @@
                 "--provider",
                 "github",
                 "--nodes",
-                "issuesV1"
+                "pullsV12"
             ]
         },
         {
@@ -33,7 +33,9 @@
                 "--scraperPoint",
                 "trending",
                 "--provider",
-                "gitlab"
+                "gitlab",
+                "--nodes",
+                "pullsV12"
             ]
         },
         {
