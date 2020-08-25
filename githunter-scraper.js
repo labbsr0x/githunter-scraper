@@ -1,13 +1,24 @@
+const path = require('path');
+const fs = require('fs');
 const server = require('./server/server');
 const Flags = require('./flags/Flags');
 const env = require('./env');
 const database = require('./database');
+const controller = require('./controller/controller');
 
-const knownProviders = ['github', 'gitlab'];
-const knownScraperPoint = ['trending'];
+const getScraperPoints = () => {
+  const scraperDirectory = './controller/scraper';
+  return fs
+    .readdirSync(scraperDirectory)
+    .filter(file =>
+      fs.statSync(path.join(scraperDirectory, file)).isDirectory(),
+    );
+};
+
+const knownScraperPoint = getScraperPoints();
 
 const optionsFlag = {
-  requiredFlags: ['provider', 'scraperPoint'],
+  requiredFlags: ['scraperPoint'],
 };
 
 const flagsObj = new Flags(process.argv, optionsFlag);
@@ -16,27 +27,15 @@ env.flags = flags;
 
 if (flags.server) {
   server();
-
-  process.exit(0);
 }
 
 if (!flagsObj.isValid(flags)) {
   console.log(`Required fields: ${optionsFlag.requiredFlags.join(' | ')}`);
   console.log('\tUsage: ');
-  console.log(
-    '\t\tnode main.js  --provider <provider> --scraperPoint <scraperPoint>',
-  );
-  console.log(`\t\t<provider>: ${knownProviders.join(' | ')}`);
+  console.log('\t\tnode main.js --scraperPoint <scraperPoint>');
   console.log(`\t\t<scraperPoint>: ${knownScraperPoint.join(' | ')}`);
   console.log('\tExample: ');
   console.log('\t\tnode main.js --provider github --scraperPoint trending');
-
-  process.exit(0);
-}
-
-if (!knownProviders.includes(flags.provider)) {
-  console.log(`Unknown Provider: ${flags.provider}`);
-  console.log(`\tKnowns providers: ${knownProviders.join(' | ')}`);
 
   process.exit(0);
 }
@@ -51,10 +50,7 @@ if (!knownScraperPoint.includes(flags.scraperPoint)) {
 const scraper = async () => {
   try {
     await database.connectDB();
-
-    // eslint-disable-next-line global-require
-    const theProvider = require(`./${flags.provider}/startup`);
-    theProvider.run(flags);
+    controller.run();
   } catch (error) {
     console.log(error);
   }

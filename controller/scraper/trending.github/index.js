@@ -1,4 +1,4 @@
-const c = require('../crawler');
+const c = require('../../../crawler/crawler');
 const config = require('./config');
 
 const callback = async (error, res, done) => {
@@ -28,16 +28,14 @@ const callback = async (error, res, done) => {
 
   const { $ } = res;
   const repos = [];
+  const provider = 'github';
   const articles = $('article>h1>a');
 
   Object.values(articles).forEach(item => {
-    // Getting all repos in trending page
-    // const item = articles[key];
-
     if (item && item.attribs && item.attribs.href) {
-      // Getting id for database
+      // Getting id from href attribute
       const repo = item.attribs.href.split('/');
-      if (repo.length) repos.push({ owner: repo[1], name: repo[2] });
+      if (repo.length) repos.push({ owner: repo[1], name: repo[2], provider });
     }
   });
 

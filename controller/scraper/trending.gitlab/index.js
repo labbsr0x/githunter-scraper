@@ -1,4 +1,4 @@
-const c = require('../crawler');
+const c = require('../../../crawler/crawler');
 const config = require('./config');
 
 const callback = async (error, res, done) => {
@@ -28,19 +28,17 @@ const callback = async (error, res, done) => {
 
   const { $ } = res;
   const repos = [];
+  const provider = 'gitlab';
   const articles = $('li.project-row .project-title a');
 
   Object.values(articles).forEach(item => {
-    // Getting all repos in trending page
-    // const item = articles[key];
-
     if (item && item.attribs && item.attribs.href) {
-      // Getting id for database
+      // Getting id from href attribute
       const repo = item.attribs.href.split('/');
       repo.shift(); // remove first white space
       const owner = repo.shift();
-      const name = repo.join("/");
-      if (owner && name) repos.push({ owner, name });
+      const name = repo.join('/');
+      if (owner && name) repos.push({ owner, name, provider });
     }
   });
 
