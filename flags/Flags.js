@@ -13,7 +13,7 @@ class Flags {
     const flagsParsed = {};
     const flags = this.args.filter(item => this.isFlag(item));
 
-    flags.forEach((theFlag) => {
+    flags.forEach(theFlag => {
       const flagIndex = this.args.indexOf(theFlag);
       let nextValue;
       if (this.hasNextValue(this.args[flagIndex + 1])) {
@@ -37,7 +37,7 @@ class Flags {
     return difference.length === 0;
   }
 
-  hasNextValue(value) {
+  static hasNextValue(value) {
     return value;
   }
 
