@@ -16,7 +16,7 @@ const hasRateLimit = async accessToken => {
     headers: {
       Accept: 'application/vnd.github.v3+json',
     },
-    access_token: accessToken,
+    accessToken,
   });
 
   try {
