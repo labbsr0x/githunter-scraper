@@ -1,5 +1,5 @@
 const githunterApi = require('../githunter-api/controller');
-const db = require('../database/repositories/RepoRepository');
+const dbCode = require('../database/repositories/CodeInfoRepository');
 const env = require('../env');
 const starws = require('../star-ws/controller');
 const contract = require('../contract/startWs.mapper');
@@ -10,9 +10,16 @@ const nodesSource = {
   commits: githunterApi.getRepositoryCommits,
 };
 
-const readRepositoryInformation = async repo => {
-  const repoInfo = await githunterApi.getRepositoryInformation(repo);
-  db.save(repoInfo);
+const readCodePageInformation = async repo => {
+  const maker = contract.code;
+  const data = await githunterApi.getCodePageInformation(repo);
+  if (!data) return;
+  const normalizedData = maker({
+    ...data,
+    ...repo
+  });
+
+  dbCode.save(normalizedData);
 };
 
 const readInformation = async (node, repo) => {
@@ -23,7 +30,10 @@ const readInformation = async (node, repo) => {
   if (!response || (response.data && response.data.length === 0))
     return normalizedData;
   Object.values(response.data).forEach(theData => {
-    normalizedData.push(theMaker({ ...theData, ...repo }));
+    normalizedData.push(theMaker({
+      ...theData,
+      ...repo
+    }));
   });
 
   return normalizedData;
@@ -37,10 +47,10 @@ const loadDataFromGithunterAPI = async repoList => {
   const promises = repoList.map(async repo => {
     if (
       !env.flags.nodes ||
-      (env.flags.nodes && env.flags.nodes.includes('repository'))
+      (env.flags.nodes && env.flags.nodes.includes('code'))
     ) {
       try {
-        readRepositoryInformation(repo);
+        readCodePageInformation(repo);
       } catch (e) {
         console.log(e);
       }
@@ -115,4 +125,6 @@ const run = async () => {
   }
 };
 
-module.exports = { run };
+module.exports = {
+  run
+};

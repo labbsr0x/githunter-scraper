@@ -1,8 +1,37 @@
 const moment = require('moment');
 const JM = require('json-mapper');
+const utils = require('../utils');
 
 const h = JM.helpers;
 const shortStringLen = 8;
+
+const code = JM.makeConverter({
+  name: 'name',
+  description: 'description',
+  createdAt: (data) => utils.dateFormat4StarWS(data.createdAt),
+  primaryLanguage: 'primaryLanguage',
+  repositoryTopics: (data) => utils.concatArray4StarWS(data.repositoryTopics),
+  watchers: ['watchers', h.toString],
+  stars: ['stars', h.toString],
+  forks: ['forks', h.toString],
+  lastCommitDate: (data) => utils.dateFormat4StarWS(data.lastCommitDate),
+  commits: ['commits', h.toString],
+  hasHomepageUrl: 'hasHomepageUrl',
+  hasReadmeFile: 'hasReadmeFile',
+  hasContributingFile: 'hasContributingFile',
+  licenseInfo: 'licenseInfo',
+  hasCodeOfConductFile: 'hasCodeOfConductFile',
+  releases: ['releases', h.toString],
+  contributors: ['contributors', h.toString],
+  languages: (data) => {
+    const totalCount = data.languages.totalCount;
+    const languages = data.languages.data.map(item => item.name);
+    return `totalCount: ` + String(totalCount).concat(`, languages: ` + languages);
+  },
+  diskUsage: ['diskUsage', h.toString],
+  provider: 'provider',
+  type: JM.helpers.def('codePageInfo')
+});
 
 const pulls = JM.makeConverter({
   dateTime: () => moment().format(),
@@ -45,9 +74,9 @@ const pulls = JM.makeConverter({
     totalParticipants: ['participants.totalCount', h.toString],
     participants: input => {
       const participants =
-        input.participants && input.participants.users
-          ? input.participants.users.join(',')
-          : '';
+        input.participants && input.participants.users ?
+        input.participants.users.join(',') :
+        '';
       return participants.substring(0, shortStringLen);
     },
     commentsTotal: ['comments.totalCount', h.toString],
@@ -62,9 +91,9 @@ const pulls = JM.makeConverter({
     },
     comments: input => {
       const authors =
-        input.comments && input.comments.data
-          ? input.comments.data.map(item => item.author).join(',')
-          : '';
+        input.comments && input.comments.data ?
+        input.comments.data.map(item => item.author).join(',') :
+        '';
       return authors.substring(0, shortStringLen);
     },
     dono: 'owner',
@@ -102,6 +131,7 @@ const commits = JM.makeConverter({
 });
 
 module.exports = {
+  code,
   pulls,
   issues,
   commits,
