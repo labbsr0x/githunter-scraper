@@ -25,29 +25,25 @@ const flagsObj = new Flags(process.argv, optionsFlag);
 const flags = flagsObj.parse();
 env.flags = flags;
 
-if (flags.server) {
-  server();
-}
-
-if (!flagsObj.isValid(flags)) {
-  console.log(`Required fields: ${optionsFlag.requiredFlags.join(' | ')}`);
-  console.log('\tUsage: ');
-  console.log('\t\tnode main.js --scraperPoint <scraperPoint>');
-  console.log(`\t\t<scraperPoint>: ${knownScraperPoint.join(' | ')}`);
-  console.log('\tExample: ');
-  console.log('\t\tnode main.js --provider github --scraperPoint trending');
-
-  process.exit(0);
-}
-
-if (!knownScraperPoint.includes(flags.scraperPoint)) {
-  console.log(`Unknown scraperPoint: ${flags.scraperPoint}`);
-  console.log(`\tKnowns scraperPoint: ${knownScraperPoint.join(' | ')}`);
-
-  process.exit(0);
-}
-
 const scraper = async () => {
+  if (!flagsObj.isValid(flags)) {
+    console.log(`Required fields: ${optionsFlag.requiredFlags.join(' | ')}`);
+    console.log('\tUsage: ');
+    console.log('\t\tnode main.js --scraperPoint <scraperPoint>');
+    console.log(`\t\t<scraperPoint>: ${knownScraperPoint.join(' | ')}`);
+    console.log('\tExample: ');
+    console.log('\t\tnode main.js --provider github --scraperPoint trending');
+
+    process.exit(0);
+  }
+
+  if (!knownScraperPoint.includes(flags.scraperPoint)) {
+    console.log(`Unknown scraperPoint: ${flags.scraperPoint}`);
+    console.log(`\tKnowns scraperPoint: ${knownScraperPoint.join(' | ')}`);
+
+    process.exit(0);
+  }
+
   try {
     await database.connectDB();
     controller.run();
@@ -56,4 +52,8 @@ const scraper = async () => {
   }
 };
 
-scraper();
+if (flags.server) {
+  server();
+} else {
+  scraper();
+}

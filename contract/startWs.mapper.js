@@ -44,14 +44,15 @@ const pulls = JM.makeConverter({
     },
     totalParticipants: ['participants.totalCount', h.toString],
     participants: input => {
-      const participants = input.participants.users
-        ? input.participants.users.join(',')
-        : '';
+      const participants =
+        input.participants && input.participants.users
+          ? input.participants.users.join(',')
+          : '';
       return participants.substring(0, shortStringLen);
     },
     commentsTotal: ['comments.totalCount', h.toString],
     commentsUpdatedAt: input => {
-      const date = input.comments.updatedAt;
+      const date = input.comments ? input.comments.updatedAt : null;
       if (!date) return '';
 
       const theDate = moment(date);
@@ -60,9 +61,10 @@ const pulls = JM.makeConverter({
       return theDate.format();
     },
     comments: input => {
-      const authors = input.comments.data
-        ? input.comments.data.map(item => item.author).join(',')
-        : '';
+      const authors =
+        input.comments && input.comments.data
+          ? input.comments.data.map(item => item.author).join(',')
+          : '';
       return authors.substring(0, shortStringLen);
     },
     dono: 'owner',
@@ -73,7 +75,7 @@ const pulls = JM.makeConverter({
   tags: {},
 });
 
-const issue = JM.makeConverter({
+const issues = JM.makeConverter({
   dateTime: () => moment().format(),
   fields: {
     number: ['number', h.toString],
@@ -93,7 +95,7 @@ const issue = JM.makeConverter({
   tags: {},
 });
 
-const commit = JM.makeConverter({
+const commits = JM.makeConverter({
   dateTime: () => moment().format(),
   fields: {},
   tags: {},
@@ -101,6 +103,6 @@ const commit = JM.makeConverter({
 
 module.exports = {
   pulls,
-  issue,
-  commit,
+  issues,
+  commits,
 };

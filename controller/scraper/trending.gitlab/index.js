@@ -28,7 +28,7 @@ const callback = async (error, res, done) => {
 
   const { $ } = res;
   const repos = [];
-  const provider = 'gitlab';
+  const { provider } = config;
   const articles = $('li.project-row .project-title a');
 
   Object.values(articles).forEach(item => {

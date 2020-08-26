@@ -16,7 +16,7 @@
                 "--scraperPoint",
                 "trending.github",
                 "--nodes",
-                "pullsV12"
+                "pulls"
             ]
         },
         {

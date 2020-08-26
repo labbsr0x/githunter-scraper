@@ -28,7 +28,7 @@ const callback = async (error, res, done) => {
 
   const { $ } = res;
   const repos = [];
-  const provider = 'github';
+  const { provider } = config;
   const articles = $('article>h1>a');
 
   Object.values(articles).forEach(item => {

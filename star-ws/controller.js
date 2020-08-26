@@ -56,7 +56,7 @@ const authenticate = async () => {
   }
 };
 
-const publishMetrics = async (node, data) => {
+const publishMetrics = async (provider, node, data) => {
   const isAuthenticate = await authenticate();
   if (!isAuthenticate) {
     console.log('error authenticating');
@@ -65,7 +65,7 @@ const publishMetrics = async (node, data) => {
   let endPoint = starwsConfig.endpoints.publishMetrics;
 
   const route = new Route(endPoint);
-  endPoint = route.reverse({ provider: data.provider, node });
+  endPoint = route.reverse({ provider, node });
 
   try {
     const response = await httpClient.post(endPoint, data);
