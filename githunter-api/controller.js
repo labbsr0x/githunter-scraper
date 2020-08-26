@@ -36,11 +36,14 @@ const hasRateLimit = async accessToken => {
 
 const getValidToken4Github = async () => {
   const gitHunterConfig = config.get('githunter');
-  const personalTokenList = gitHunterConfig['github'].rateLimit.personalToken;
+  const personalTokenList = gitHunterConfig.github.rateLimit.personalToken;
 
   for (const token of personalTokenList) {
     const limits = await hasRateLimit(token);
-    if (limits && limits.remaining > gitHunterConfig['github'].rateLimit.minLimit) {
+    if (
+      limits &&
+      limits.remaining > gitHunterConfig.github.rateLimit.minLimit
+    ) {
       return token;
     }
   }
@@ -49,18 +52,20 @@ const getValidToken4Github = async () => {
 
 const getValidToken4Gitlab = () => {
   const gitHunterConfig = config.get('githunter');
-  const personalTokenList = gitHunterConfig['gitlab'].rateLimit.personalToken;
+  const personalTokenList = gitHunterConfig.gitlab.rateLimit.personalToken;
   const index = Math.floor(Math.random() * personalTokenList.length);
   return personalTokenList[index];
 };
 
-const getValidToken = async (provider) => {
-  
+const getValidToken = async provider => {
   switch (provider) {
-    case "github":
-      return await getValidToken4Github(provider);
-    case "gitlab":
-      return getValidToken4Gitlab(provider);
+    case 'github': {
+      const token = await getValidToken4Github();
+      return token;
+    }
+    case 'gitlab': {
+      return getValidToken4Gitlab();
+    }
     default:
       break;
   }

@@ -14,11 +14,9 @@
             "program": "${workspaceFolder}/githunter-scraper.js",
             "args": [
                 "--scraperPoint",
-                "trending",
-                "--provider",
-                "github",
+                "trending.github",
                 "--nodes",
-                "pullsV12"
+                "pulls"
             ]
         },
         {
@@ -31,11 +29,9 @@
             "program": "${workspaceFolder}/githunter-scraper.js",
             "args": [
                 "--scraperPoint",
-                "trending",
-                "--provider",
-                "gitlab",
+                "trending.gitlab",
                 "--nodes",
-                "pullsV12"
+                "pulls"
             ]
         },
         {

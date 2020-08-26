@@ -1,11 +1,12 @@
 const Flags = require('../flags/Flags');
 const env = require('../env');
+const controller = require('../controller/controller');
 
 const optionsFlag = {
-  requiredFlags: ['provider', 'scraperPoint'],
+  requiredFlags: ['scraperPoint'],
 };
 
-const controller = (req, res) => {
+const controllerConductor = (req, res) => {
   const { args } = req.query;
 
   if (!args) {
@@ -22,11 +23,9 @@ const controller = (req, res) => {
     return;
   }
 
-  // eslint-disable-next-line global-require
-  const theProvider = require(`../${flags.provider}/startup`);
-  theProvider.run();
+  controller.run();
 
   res.send(flags);
 };
 
-module.exports = controller;
+module.exports = controllerConductor;
