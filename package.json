@@ -7,6 +7,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --fix . --ext .js"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm run lint"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://afa999b83491cbeac3fb51003ad5b94abcdb0e6f@github.com/labbsr0x/githunter-crawler.git"
@@ -38,6 +44,7 @@
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-import": "^2.22.0",
     "eslint-plugin-prettier": "^3.1.4",
+    "husky": "^4.2.5",
     "prettier": "^2.0.5"
   }
 }
