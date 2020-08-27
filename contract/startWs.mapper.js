@@ -24,7 +24,9 @@ const code = JM.makeConverter({
   releases: ['releases', h.toString],
   contributors: ['contributors', h.toString],
   languages: data => {
-    const { totalCount } = data.languages;
+    const {
+      totalCount
+    } = data.languages;
     const languages = data.languages.data.map(item => item.name);
     return `totalCount: ${String(totalCount).concat(
       `, languages: ${languages}`,
@@ -76,9 +78,9 @@ const pulls = JM.makeConverter({
     totalParticipants: ['participants.totalCount', h.toString],
     participants: input => {
       const participants =
-        input.participants && input.participants.users
-          ? input.participants.users.join(',')
-          : '';
+        input.participants && input.participants.users ?
+        input.participants.users.join(',') :
+        '';
       return participants.substring(0, shortStringLen);
     },
     commentsTotal: ['comments.totalCount', h.toString],
@@ -93,9 +95,9 @@ const pulls = JM.makeConverter({
     },
     comments: input => {
       const authors =
-        input.comments && input.comments.data
-          ? input.comments.data.map(item => item.author).join(',')
-          : '';
+        input.comments && input.comments.data ?
+        input.comments.data.map(item => item.author).join(',') :
+        '';
       return authors.substring(0, shortStringLen);
     },
     dono: 'owner',
@@ -122,13 +124,21 @@ const issues = JM.makeConverter({
     timelineItemsNodes: '',
     dono: 'owner',
     name: 'name',
+    provider: 'provider',
+    type: JM.helpers.def('issues'),
   },
   tags: {},
 });
 
 const commits = JM.makeConverter({
   dateTime: () => moment().format(),
-  fields: {},
+  fields: {
+    message: 'message',
+    committedDate: data => utils.dateFormat4StarWS(data.committedDate),
+    author: 'author',
+    provider: 'provider',
+    type: JM.helpers.def('commits'),
+  },
   tags: {},
 });
 
