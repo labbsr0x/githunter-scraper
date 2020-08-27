@@ -44,6 +44,8 @@ const readInformation = async (node, repo) => {
 const loadDataFromGithunterAPI = async repoList => {
   const data = {
     pulls: [],
+    issues: [],
+    commits: [],
   };
   // console.log(`START ton of request: ${moment().format()}`);
   const promises = repoList.map(async repo => {
