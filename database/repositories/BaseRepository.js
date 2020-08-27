@@ -5,8 +5,8 @@ class BaseRepository {
 
   async find(query = {}, { multiple = true } = {}) {
     const results = multiple
-      ? this.collection.find(query)
-      : this.collection.findOne(query);
+      ? this.Collection.find(query)
+      : this.Collection.findOne(query);
 
     return results;
   }
@@ -18,15 +18,28 @@ class BaseRepository {
   }
 
   async findOneAndUpdate(conditions, update) {
-    return this.collection.findOneAndUpdate(conditions, update, { new: true });
+    return this.Collection.findOneAndUpdate(conditions, update, {
+      new: true,
+    });
   }
 
   async save(body) {
-    const doc = await this.find({ name: body.name, owner: body.owner }, false);
+    const doc = await this.find(
+      {
+        name: body.name,
+        owner: body.owner,
+      },
+      false,
+    );
     if (doc && doc.length === 0) {
       return this.create(body);
     }
-    return this.findOneAndUpdate({ _id: doc[0].id }, body);
+    return this.findOneAndUpdate(
+      {
+        _id: doc[0].id,
+      },
+      body,
+    );
   }
 }
 
