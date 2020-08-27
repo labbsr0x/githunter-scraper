@@ -13,10 +13,10 @@ class Flags {
     const flagsParsed = {};
     const flags = this.args.filter(item => this.isFlag(item));
 
-    flags.forEach((theFlag) => {
+    flags.forEach(theFlag => {
       const flagIndex = this.args.indexOf(theFlag);
       let nextValue;
-      if (this.hasNextValue(this.args[flagIndex + 1])) {
+      if (this.args[flagIndex + 1]) {
         nextValue = this.args[flagIndex + 1];
         flagsParsed[this.removeTagNotation(theFlag)] = this.isFlag(nextValue)
           ? true
@@ -35,10 +35,6 @@ class Flags {
       x => !exitingFlags.includes(x),
     );
     return difference.length === 0;
-  }
-
-  hasNextValue(value) {
-    return value;
   }
 
   isFlag(value) {

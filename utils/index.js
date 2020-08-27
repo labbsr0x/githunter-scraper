@@ -2,20 +2,20 @@ const moment = require('moment');
 
 const utils = (() => {
   return {
-    dateFormat4StarWS: (data) => {
+    dateFormat4StarWS: data => {
       if (!data) {
-        return "";
+        return '';
       }
 
       const theDate = moment(data);
       if (!theDate.isValid) {
-        return "";
+        return '';
       }
 
       return theDate.format();
     },
     concatArray4StarWS: (data, shortStringLen = 8) => {
-      const str = data && Array.isArray(data) ? data.join(",") : "";
+      const str = data && Array.isArray(data) ? data.join(',') : '';
       if (!str) {
         return data;
       }

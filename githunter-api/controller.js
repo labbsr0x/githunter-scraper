@@ -102,7 +102,7 @@ const sendGetToGithunter = async (path, data) => {
 
 const getCodePageInformation = async params => {
   return sendGetToGithunter(githunterConfig.endpoints.codePageInfo, params);
-}
+};
 
 const getRepositoryCommits = async params => {
   return sendGetToGithunter(githunterConfig.endpoints.commits, params);
@@ -120,5 +120,5 @@ module.exports = {
   getCodePageInformation,
   getRepositoryCommits,
   getRepositoryPullsRequest,
-  getRepositoryIssues
-}
+  getRepositoryIssues,
+};

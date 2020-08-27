@@ -16,7 +16,7 @@ const readCodePageInformation = async repo => {
   if (!data) return;
   const normalizedData = maker({
     ...data,
-    ...repo
+    ...repo,
   });
 
   dbCode.save(normalizedData);
@@ -30,10 +30,12 @@ const readInformation = async (node, repo) => {
   if (!response || (response.data && response.data.length === 0))
     return normalizedData;
   Object.values(response.data).forEach(theData => {
-    normalizedData.push(theMaker({
-      ...theData,
-      ...repo
-    }));
+    normalizedData.push(
+      theMaker({
+        ...theData,
+        ...repo,
+      }),
+    );
   });
 
   return normalizedData;
@@ -126,5 +128,5 @@ const run = async () => {
 };
 
 module.exports = {
-  run
+  run,
 };
