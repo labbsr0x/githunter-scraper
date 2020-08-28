@@ -24,7 +24,7 @@ const code = JM.makeConverter({
   releases: ['releases', h.toString],
   contributors: ['contributors', h.toString],
   languages: data => {
-    const totalCount = data.languages;
+    const { totalCount } = data.languages;
     const languages = data.languages.data.map(item => item.name);
     return `totalCount: ${String(totalCount).concat(
       `, languages: ${languages}`,
