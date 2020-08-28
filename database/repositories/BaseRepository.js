@@ -24,22 +24,11 @@ class BaseRepository {
   }
 
   async save(body) {
-    const doc = await this.find(
-      {
-        name: body.name,
-        owner: body.owner,
-      },
-      false,
-    );
+    const doc = await this.find({ name: body.name, owner: body.owner }, false);
     if (doc && doc.length === 0) {
       return this.create(body);
     }
-    return this.findOneAndUpdate(
-      {
-        _id: doc[0].id,
-      },
-      body,
-    );
+    return this.findOneAndUpdate({ _id: doc[0].id }, body);
   }
 }
 
