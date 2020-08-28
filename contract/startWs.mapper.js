@@ -8,7 +8,7 @@ const shortStringLen = 8;
 const code = JM.makeConverter({
   name: 'name',
   description: 'description',
-  createdAt: data => utils.dateFormat4StarWS(data.createdAt),
+  repoCreatedAt: data => utils.dateFormat4StarWS(data.createdAt),
   primaryLanguage: 'primaryLanguage',
   repositoryTopics: data => utils.concatArray4StarWS(data.repositoryTopics),
   watchers: ['watchers', h.toString],

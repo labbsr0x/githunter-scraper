@@ -10,7 +10,7 @@ const codeInfoSchema = new Schema(
     description: {
       type: String,
     },
-    createdAt: {
+    repoCreatedAt: {
       type: String,
     },
     primaryLanguage: {
