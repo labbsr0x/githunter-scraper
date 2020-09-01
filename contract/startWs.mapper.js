@@ -111,15 +111,32 @@ const issues = JM.makeConverter({
   fields: {
     number: ['number', h.toString],
     state: 'state',
-    createdAt: 'createdAt',
-    closedAt: 'closedAt',
-    updatedAt: 'updatedAt',
-    authorLogin: 'authorLogin.author',
-    labels: '',
+    createdAt: input => utils.dateFormat4StarWS(input.createdAt),
+    closedAt: input => utils.dateFormat4StarWS(input.closedAt),
+    updatedAt: input => utils.dateFormat4StarWS(input.updatedAt),
+    author: 'author',
+    labels: input => {
+      const labels = input.labels ? input.labels.join(',') : '';
+      return labels.substring(0, shortStringLen);
+    },
     participantsTotalCount: ['participants.totalCount', h.toString],
-    timelineItemsTotalCount: ['timelineItems.totalCount', h.toString],
-    timelineUpdatedAt: 'timelineItems.updatedAt',
-    timelineItemsNodes: '',
+    participants: input => {
+      const participants =
+        input.participants && input.participants.users
+          ? input.participants.users.join(',')
+          : '';
+      return participants.substring(0, shortStringLen);
+    },
+    commentsTotalCount: ['comments.totalCount', h.toString],
+    commentsUpdatedAt: input =>
+      utils.dateFormat4StarWS(input.comments.updatedAt),
+    comments: input => {
+      const authors =
+        input.comments && input.comments.data
+          ? input.comments.data.map(item => item.author).join(',')
+          : '';
+      return authors.substring(0, shortStringLen);
+    },
     dono: 'owner',
     name: 'name',
     provider: 'provider',
