@@ -21,7 +21,9 @@
       "codePageInfo": "/v1/code",
       "commits": "/v1/commits",
       "pulls": "/v1/pulls",
-      "issues": "/v1/issues"
+      "issues": "/v1/issues",
+      "organizationMembers": "/v1/organization/members",
+      "userStats": "/v1/user/stats"
     },
     "github": {
       "rateLimit": {
