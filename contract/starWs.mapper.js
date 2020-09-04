@@ -144,10 +144,10 @@ const userStats = JM.makeConverter({
       return `l:${input.login.substring(0, shortStringLen)}`;
     },
     avatarUrl: 'avatarUrl',
-    repositories: ['amount.repositories', h.toString],
+    contributedRepositories: ['amount.contributedRepositories', h.toString],
     commits: ['amount.commits', h.toString],
     pullRequests: ['amount.pullRequests', h.toString],
-    issues: ['amount.issues', h.toString],
+    issuesOpened: ['amount.issuesOpened', h.toString],
     starsReceived: ['amount.starsReceived', h.toString],
     followers: ['amount.followers', h.toString],
     provider: 'provider',
