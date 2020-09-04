@@ -1,5 +1,6 @@
 const express = require('express');
 const conductorController = require('../conductor/controller');
+const mongoDBController = require('../database/server.controller');
 
 const init = middlewares => {
   const router = express.Router();
@@ -9,6 +10,8 @@ const init = middlewares => {
   }
 
   router.get('/conductor', conductorController);
+
+  router.get('/mongo/data', mongoDBController);
 
   return router;
 };
