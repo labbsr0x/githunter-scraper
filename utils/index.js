@@ -4,20 +4,20 @@ const utils = (() => {
   return {
     dateFormat4StarWS: data => {
       if (!data) {
-        return '';
+        return moment(0).format();
       }
 
       const theDate = moment(data);
       if (!theDate.isValid) {
-        return '';
+        return moment(0).format();
       }
 
       return theDate.format();
     },
-    concatArray4StarWS: (data, shortStringLen = 8) => {
+    concatArray4StarWS: (data, shortStringLen = 16) => {
       const str = data && Array.isArray(data) ? data.join(',') : '';
       if (!str) {
-        return data;
+        return 'no-string';
       }
       return str.substring(0, shortStringLen);
     },

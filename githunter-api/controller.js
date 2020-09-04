@@ -116,9 +116,22 @@ const getRepositoryIssues = async params => {
   return sendGetToGithunter(githunterConfig.endpoints.issues, params);
 };
 
+const getOrganizationMembers = async params => {
+  return sendGetToGithunter(
+    githunterConfig.endpoints.organizationMembers,
+    params,
+  );
+};
+
+const getUserStats = async params => {
+  return sendGetToGithunter(githunterConfig.endpoints.userStats, params);
+};
+
 module.exports = {
   getCodePageInformation,
   getRepositoryCommits,
   getRepositoryPullsRequest,
   getRepositoryIssues,
+  getOrganizationMembers,
+  getUserStats,
 };

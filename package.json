@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Crawler some Git Webpages",
   "main": "githunter-scraper.js",
+  "engines": {
+    "node": ">=10.20.1"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "eslint --fix . --ext .js"
