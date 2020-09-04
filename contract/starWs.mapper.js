@@ -3,7 +3,7 @@ const JM = require('json-mapper');
 const utils = require('../utils');
 
 const h = JM.helpers;
-const shortStringLen = 8;
+const shortStringLen = 16;
 
 const code = JM.makeConverter({
   name: 'name',
@@ -36,70 +36,42 @@ const code = JM.makeConverter({
 });
 
 const pulls = JM.makeConverter({
-  dateTime: () => moment().format(),
+  dateTime: () => moment().format('YYYY-MM-DDTHH:mm:ss.SSSSZ'),
   fields: {
     number: ['number', h.toString],
     state: 'state',
-    createdAt: input => {
-      const date = input.createdAt;
-      if (!date) return '';
-
-      const theDate = moment(date);
-      if (!theDate.isValid) return '';
-
-      return theDate.format();
-    },
-    closedAt: input => {
-      const date = input.closedAt;
-      if (!date) return '';
-
-      const theDate = moment(date);
-      if (!theDate.isValid) return '';
-
-      return theDate.format();
-    },
+    createdAt: input => utils.dateFormat4StarWS(input.createdAt),
+    closedAt: input => utils.dateFormat4StarWS(input.closedAt),
     merged: ['merged', h.toString],
-    mergedAt: input => {
-      const date = input.mergedAt;
-      if (!date) return '';
-
-      const theDate = moment(date);
-      if (!theDate.isValid) return '';
-
-      return theDate.format();
+    mergedAt: input => utils.dateFormat4StarWS(input.mergedAt),
+    author: input => {
+      return `a:${input.author.substring(0, shortStringLen)}`;
     },
-    author: 'author',
-    labels: input => {
-      const labels = input.labels ? input.labels.join(',') : '';
-      return labels.substring(0, shortStringLen);
-    },
+    labels: input => utils.concatArray4StarWS(input.labels),
     totalParticipants: ['participants.totalCount', h.toString],
     participants: input => {
       const participants =
         input.participants && input.participants.users
-          ? input.participants.users.join(',')
+          ? utils.concatArray4StarWS(input.participants.users)
           : '';
-      return participants.substring(0, shortStringLen);
+      return `p:${participants}`;
     },
     commentsTotal: ['comments.totalCount', h.toString],
-    commentsUpdatedAt: input => {
-      const date = input.comments ? input.comments.updatedAt : null;
-      if (!date) return '';
-
-      const theDate = moment(date);
-      if (!theDate.isValid) return '';
-
-      return theDate.format();
-    },
+    commentsUpdatedAt: input =>
+      utils.dateFormat4StarWS(input.comments.updatedAt),
     comments: input => {
       const authors =
         input.comments && input.comments.data
           ? input.comments.data.map(item => item.author).join(',')
           : '';
-      return authors.substring(0, shortStringLen);
+      return `a:${authors.substring(0, shortStringLen)}`;
     },
-    dono: 'owner',
-    name: 'name',
+    dono: input => {
+      return `o:${input.owner.substring(0, shortStringLen)}`;
+    },
+    name: input => {
+      return `n:${input.name.substring(0, shortStringLen)}`;
+    },
     provider: 'provider',
     type: JM.helpers.def('pull'),
   },
@@ -107,7 +79,7 @@ const pulls = JM.makeConverter({
 });
 
 const issues = JM.makeConverter({
-  dateTime: () => moment().format(),
+  dateTime: () => moment().format('YYYY-MM-DDTHH:mm:ss.SSSSZ'),
   fields: {
     number: ['number', h.toString],
     state: 'state',
@@ -115,17 +87,14 @@ const issues = JM.makeConverter({
     closedAt: input => utils.dateFormat4StarWS(input.closedAt),
     updatedAt: input => utils.dateFormat4StarWS(input.updatedAt),
     author: 'author',
-    labels: input => {
-      const labels = input.labels ? input.labels.join(',') : '';
-      return labels.substring(0, shortStringLen);
-    },
+    labels: input => utils.concatArray4StarWS(input.labels),
     participantsTotalCount: ['participants.totalCount', h.toString],
     participants: input => {
       const participants =
         input.participants && input.participants.users
-          ? input.participants.users.join(',')
+          ? utils.concatArray4StarWS(input.participants.users)
           : '';
-      return participants.substring(0, shortStringLen);
+      return `p:${participants}`;
     },
     commentsTotalCount: ['comments.totalCount', h.toString],
     commentsUpdatedAt: input =>
@@ -135,10 +104,14 @@ const issues = JM.makeConverter({
         input.comments && input.comments.data
           ? input.comments.data.map(item => item.author).join(',')
           : '';
-      return authors.substring(0, shortStringLen);
+      return `a:${authors.substring(0, shortStringLen)}`;
     },
-    dono: 'owner',
-    name: 'name',
+    dono: input => {
+      return `o:${input.owner.substring(0, shortStringLen)}`;
+    },
+    name: input => {
+      return `n:${input.name.substring(0, shortStringLen)}`;
+    },
     provider: 'provider',
     type: JM.helpers.def('issues'),
   },
@@ -146,13 +119,39 @@ const issues = JM.makeConverter({
 });
 
 const commits = JM.makeConverter({
-  dateTime: () => moment().format(),
+  dateTime: () => moment().format('YYYY-MM-DDTHH:mm:ss.SSSSZ'),
   fields: {
-    message: 'message',
+    message: input => {
+      return `m:${input.message.substring(0, shortStringLen)}`;
+    },
     committedDate: data => utils.dateFormat4StarWS(data.committedDate),
-    author: 'author',
+    author: input => {
+      return `a:${input.author.substring(0, shortStringLen)}`;
+    },
     provider: 'provider',
     type: JM.helpers.def('commits'),
+  },
+  tags: {},
+});
+
+const userStats = JM.makeConverter({
+  dateTime: () => moment().format('YYYY-MM-DDTHH:mm:ss.SSSSZ'),
+  fields: {
+    name: input => {
+      return `n:${input.login.substring(0, shortStringLen)}`;
+    },
+    login: input => {
+      return `l:${input.login.substring(0, shortStringLen)}`;
+    },
+    avatarUrl: 'avatarUrl',
+    repositories: ['amount.repositories', h.toString],
+    commits: ['amount.commits', h.toString],
+    pullRequests: ['amount.pullRequests', h.toString],
+    issues: ['amount.issues', h.toString],
+    starsReceived: ['amount.starsReceived', h.toString],
+    followers: ['amount.followers', h.toString],
+    provider: 'provider',
+    type: JM.helpers.def('userStats'),
   },
   tags: {},
 });
@@ -162,4 +161,5 @@ module.exports = {
   pulls,
   issues,
   commits,
+  userStats,
 };

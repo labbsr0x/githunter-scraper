@@ -2,12 +2,13 @@ const githunterApi = require('../githunter-api/controller');
 const dbCode = require('../database/repositories/CodeInfoRepository');
 const env = require('../env');
 const starws = require('../star-ws/controller');
-const contract = require('../contract/startWs.mapper');
+const contract = require('../contract/starWs.mapper');
 
 const nodesSource = {
   pulls: githunterApi.getRepositoryPullsRequest,
   issues: githunterApi.getRepositoryIssues,
   commits: githunterApi.getRepositoryCommits,
+  userStats: githunterApi.getUserStats,
 };
 
 const readCodePageInformation = async repo => {
@@ -22,18 +23,22 @@ const readCodePageInformation = async repo => {
   dbCode.save(normalizedData);
 };
 
-const readInformation = async (node, repo) => {
+const readInformation = async (node, sourceData) => {
   const theMaker = contract[node];
 
   const normalizedData = [];
-  const response = await nodesSource[node](repo);
+  const response = await nodesSource[node](sourceData);
   if (!response || (response.data && response.data.length === 0))
     return normalizedData;
+
+  if (!response.data && !Array.isArray(response)) {
+    response.data = [response];
+  }
   Object.values(response.data).forEach(theData => {
     normalizedData.push(
       theMaker({
         ...theData,
-        ...repo,
+        ...sourceData,
       }),
     );
   });
@@ -41,20 +46,16 @@ const readInformation = async (node, repo) => {
   return normalizedData;
 };
 
-const loadDataFromGithunterAPI = async repoList => {
-  const data = {
-    pulls: [],
-    issues: [],
-    commits: [],
-  };
+const loadDataFromGithunterAPI = async sourceData => {
+  const normalizedData = {};
   // console.log(`START ton of request: ${moment().format()}`);
-  const promises = repoList.map(async repo => {
+  const promises = sourceData.map(async data => {
     if (
       !env.flags.nodes ||
       (env.flags.nodes && env.flags.nodes.includes('code'))
     ) {
       try {
-        readCodePageInformation(repo);
+        readCodePageInformation(data);
       } catch (e) {
         console.log(e);
       }
@@ -66,12 +67,12 @@ const loadDataFromGithunterAPI = async repoList => {
         !env.flags.nodes ||
         (env.flags.nodes && env.flags.nodes.includes(node))
       ) {
-        if (!data[node]) data[node] = [];
+        if (!normalizedData[node]) normalizedData[node] = [];
         try {
           // eslint-disable-next-line no-await-in-loop
-          const info = await readInformation(node, repo);
+          const info = await readInformation(node, data);
           if (info && info.length > 0) {
-            data[node] = data[node].concat(info);
+            normalizedData[node] = normalizedData[node].concat(info);
           }
         } catch (e) {
           console.log(e);
@@ -83,7 +84,7 @@ const loadDataFromGithunterAPI = async repoList => {
   await Promise.all(promises);
 
   // console.log(`END ton request: ${moment().format()}`);
-  return data;
+  return normalizedData;
 };
 
 const saveStarWS = data => {
@@ -110,10 +111,15 @@ const run = async () => {
     console.log('Getting List of repositories list');
     // eslint-disable-next-line global-require
     const scraperMode = require(`./scraper/${env.flags.scraperPoint}`);
-    const repos = await scraperMode();
+    const sourceData = await scraperMode(env.flags);
+
+    if (!sourceData) {
+      console.log('No source data for load.');
+      return;
+    }
 
     console.log('Loading data from githunter-api for repositories list');
-    const data = await loadDataFromGithunterAPI(repos);
+    const data = await loadDataFromGithunterAPI(sourceData);
 
     const hasData = Object.values(data).reduce(
       (accumulator, item) => accumulator + item.length,
