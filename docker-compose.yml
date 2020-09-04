@@ -1,21 +1,65 @@
 version: '3'
 
 services:
+  conductor-server:
+    build: ./conductor/server
+    image: conductor-server
+    environment:
+      - DYNOMITE_HOSTS=dynomite:8102:us-east-1c
+      - ELASTICSEARCH_URL=elasticsearch:9300
+      - LOADSAMPLE=false
+      - PROVISIONING_UPDATE_EXISTING_TASKS=false
+    ports:
+      - 8080:8080
+    restart: always
+    networks:
+      - githunter-net
+
+  conductor-ui:
+    image: flaviostutz/conductor-ui
+    environment:
+      - WF_SERVER=http://conductor-server:8080/api/
+    ports:
+      - 5000:5000
+    networks:
+      - githunter-net
+
+  dynomite:
+    image: flaviostutz/dynomite:0.7.5
+    ports:
+      - 8102:8102
+    networks:
+      - githunter-net
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.8
+    environment:
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - transport.host=0.0.0.0
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - githunter-net
 
   mongo:
     image: mongo
     restart: always
     environment:
-        MONGO_INITDB_DATABASE: githunter-scraper
-        MONGO_INITDB_ROOT_USERNAME: githunter
-        MONGO_INITDB_ROOT_PASSWORD: G1THuNt3R
-        NODE_ENV: docker_dev
+      MONGO_INITDB_DATABASE: githunter-scraper
+      MONGO_INITDB_ROOT_USERNAME: githunter
+      MONGO_INITDB_ROOT_PASSWORD: G1THuNt3R
+      NODE_ENV: docker_dev
     volumes:
-        - ./data/mongo/001_users.js:/docker-entrypoint-initdb.d/001_users.js:ro
-        - ./data/mongo/volume:/data/db
-        - mongodb_config:/data/configdb
+      - ./data/mongo/001_users.js:/docker-entrypoint-initdb.d/001_users.js:ro
+      - ./data/mongo/volume:/data/db
+      - mongodb_config:/data/configdb
     ports:
-        - 27017:27017
+      - 27017:27017
+    networks:
+      - githunter-net
 
   api:
     build: .
@@ -23,6 +67,11 @@ services:
     restart: always
     ports:
       - 3002:3002
+    networks:
+      - githunter-net
 
 volumes:
-    mongodb_config:
+  mongodb_config:
+
+networks:
+  githunter-net:
