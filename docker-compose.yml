@@ -1,6 +1,24 @@
 version: '3'
 
 services:
+  schellar:
+    image: flaviostutz/schellar
+    environment:
+      - CONDUCTOR_API_URL=http://conductor-server:8080/api
+      - MONGO_ADDRESS=mongo
+      - MONGO_USERNAME=githunter
+      - MONGO_PASSWORD=G1THuNt3R
+      - LOG_LEVEL=info
+    ports:
+      - 3000:3000
+    logging:
+      driver: 'json-file'
+      options:
+        max-size: '20MB'
+        max-file: '5'
+    networks:
+      - githunter-net
+
   conductor-server:
     build: ./conductor/server
     image: conductor-server
