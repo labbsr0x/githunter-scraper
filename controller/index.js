@@ -8,7 +8,7 @@ const nodesSource = {
   pulls: githunterApi.getRepositoryPullsRequest,
   issues: githunterApi.getRepositoryIssues,
   commits: githunterApi.getRepositoryCommits,
-  userStats: githunterApi.getUserStats,
+  // userStats: githunterApi.getUserStats,
 };
 
 const readCodePageInformation = async repo => {
@@ -104,13 +104,14 @@ const saveStarWS = data => {
   });
 };
 
-const run = async () => {
+const run = async (scraperPoint = false) => {
   console.log('Starting scraper process');
 
   try {
     console.log('Getting List of repositories list');
+    scraperPoint = scraperPoint || env.flags.scraperPoint;
     // eslint-disable-next-line global-require
-    const scraperMode = require(`./scraper/${env.flags.scraperPoint}`);
+    const scraperMode = require(`./scraper/${scraperPoint}`);
     const sourceData = await scraperMode(env.flags);
 
     if (!sourceData) {

@@ -3,7 +3,6 @@
     "name": "scraper_repos_all_nodes",
     "retryCount": 3,
     "timeoutSeconds": 3600,
-    "inputKeys": ["scraperPoint"],
     "timeoutPolicy": "TIME_OUT_WF",
     "retryLogic": "FIXED",
     "retryDelaySeconds": 30,
