@@ -45,7 +45,7 @@ const scraperLocal = async () => {
   }
 
   try {
-    controller.run();
+    controller.run(env.flags);
   } catch (error) {
     console.log(error);
   }

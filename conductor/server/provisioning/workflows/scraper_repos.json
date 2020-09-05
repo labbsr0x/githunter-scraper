@@ -1,14 +1,15 @@
 {
-  "name": "scraper_repos_all_nodes",
+  "name": "scraper_repos",
   "description": "Scraps data from repositories",
   "version": 1,
   "tasks": [
     {
-      "name": "scraper_repos_all_nodes",
-      "taskReferenceName": "scrap_all",
+      "name": "scraper_repos",
+      "taskReferenceName": "scraper",
       "type": "SIMPLE",
       "inputParameters": {
-        "scraperPoint": "${workflow.input.scraperPoint}"
+        "scraperPoint": "${workflow.input.scraperPoint}",
+        "nodes": "${workflow.input.nodes}"
       }
     }
   ],

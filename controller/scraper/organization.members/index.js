@@ -1,11 +1,18 @@
 const githunterApi = require('../../../githunter-api/controller');
 
-const getMembers = async flags => {
-  if (!flags || (flags && !flags.organization) || (flags && !flags.provider)) {
+const getMembers = async inputData => {
+  if (
+    !inputData ||
+    (inputData && !inputData.organization) ||
+    (inputData && !inputData.provider)
+  ) {
     console.log('No `organization` or `provider` flag defined.');
     return false;
   }
-  const req = { provider: flags.provider, organization: flags.organization };
+  const req = {
+    provider: inputData.provider,
+    organization: inputData.organization,
+  };
   const response = await githunterApi.getOrganizationMembers(req);
 
   if (!response) {
@@ -14,7 +21,7 @@ const getMembers = async flags => {
 
   const normalizedMembers = [];
   response.members.data.forEach(member => {
-    normalizedMembers.push({ provider: flags.provider, login: member });
+    normalizedMembers.push({ provider: inputData.provider, login: member });
   });
 
   return normalizedMembers;
