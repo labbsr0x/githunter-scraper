@@ -1,0 +1,21 @@
+{
+  "name": "scraper_users",
+  "description": "Scraps data from users",
+  "version": 1,
+  "tasks": [
+    {
+      "name": "scraper_users",
+      "taskReferenceName": "scraper",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "scraperPoint": "${workflow.input.scraperPoint}",
+        "nodes": "${workflow.input.nodes}",
+        "organization": "${workflow.input.organization}",
+        "provider": "${workflow.input.provider}"
+      }
+    }
+  ],
+  "restartable": true,
+  "workflowStatusListenerEnabled": true,
+  "schemaVersion": 2
+}

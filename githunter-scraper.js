@@ -1,10 +1,10 @@
 const path = require('path');
 const fs = require('fs');
-const server = require('./server/server');
 const Flags = require('./flags/Flags');
 const env = require('./env');
 const database = require('./database');
-const controller = require('./controller/controller');
+const controller = require('./controller');
+const conductorClient = require('./conductor/client');
 
 const getScraperPoints = () => {
   const scraperDirectory = './controller/scraper';
@@ -25,7 +25,7 @@ const flagsObj = new Flags(process.argv, optionsFlag);
 const flags = flagsObj.parse();
 env.flags = flags;
 
-const scraper = async () => {
+const scraperLocal = async () => {
   if (!flagsObj.isValid(flags)) {
     console.log(`Required fields: ${optionsFlag.requiredFlags.join(' | ')}`);
     console.log('\tUsage: ');
@@ -45,15 +45,20 @@ const scraper = async () => {
   }
 
   try {
-    await database.connectDB();
-    controller.run();
+    controller.run(env.flags);
   } catch (error) {
     console.log(error);
   }
 };
 
-if (flags.server) {
-  server();
-} else {
-  scraper();
-}
+const run = async () => {
+  await database.connectDB();
+
+  if (flags.server) {
+    conductorClient();
+  } else {
+    scraperLocal();
+  }
+};
+
+run();

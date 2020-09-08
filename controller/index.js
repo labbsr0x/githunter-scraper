@@ -1,6 +1,5 @@
 const githunterApi = require('../githunter-api/controller');
 const dbCode = require('../database/repositories/CodeInfoRepository');
-const env = require('../env');
 const starws = require('../star-ws/controller');
 const contract = require('../contract/starWs.mapper');
 
@@ -46,14 +45,11 @@ const readInformation = async (node, sourceData) => {
   return normalizedData;
 };
 
-const loadDataFromGithunterAPI = async sourceData => {
+const loadDataFromGithunterAPI = async (sourceData, nodes) => {
   const normalizedData = {};
   // console.log(`START ton of request: ${moment().format()}`);
   const promises = sourceData.map(async data => {
-    if (
-      !env.flags.nodes ||
-      (env.flags.nodes && env.flags.nodes.includes('code'))
-    ) {
+    if (!nodes || (nodes && nodes.includes('code'))) {
       try {
         readCodePageInformation(data);
       } catch (e) {
@@ -63,10 +59,7 @@ const loadDataFromGithunterAPI = async sourceData => {
 
     // eslint-disable-next-line no-restricted-syntax
     for (const node of Object.keys(nodesSource)) {
-      if (
-        !env.flags.nodes ||
-        (env.flags.nodes && env.flags.nodes.includes(node))
-      ) {
+      if (!nodes || (nodes && nodes.includes(node))) {
         if (!normalizedData[node]) normalizedData[node] = [];
         try {
           // eslint-disable-next-line no-await-in-loop
@@ -104,22 +97,27 @@ const saveStarWS = data => {
   });
 };
 
-const run = async () => {
+const run = async ({ scraperPoint, nodes, provider, organization }) => {
   console.log('Starting scraper process');
 
   try {
-    console.log('Getting List of repositories list');
+    if (!scraperPoint) {
+      console.log('No scraperPoint provided');
+      return;
+    }
+
+    console.log(`Getting list of source data in scraper point ${scraperPoint}`);
     // eslint-disable-next-line global-require
-    const scraperMode = require(`./scraper/${env.flags.scraperPoint}`);
-    const sourceData = await scraperMode(env.flags);
+    const scraperMode = require(`./scraper/${scraperPoint}`);
+    const sourceData = await scraperMode({ provider, organization });
 
     if (!sourceData) {
       console.log('No source data for load.');
       return;
     }
 
-    console.log('Loading data from githunter-api for repositories list');
-    const data = await loadDataFromGithunterAPI(sourceData);
+    console.log('Loading data from githunter-api');
+    const data = await loadDataFromGithunterAPI(sourceData, nodes);
 
     const hasData = Object.values(data).reduce(
       (accumulator, item) => accumulator + item.length,

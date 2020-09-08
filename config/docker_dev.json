@@ -1,9 +1,18 @@
 {
-    "server": {
-        "url": "0.0.0.0",
-        "port": 3002
-    },
-    "mongo": {
-        "host": "mongo"
-    }
+  "server": {
+    "url": "0.0.0.0",
+    "port": 3002
+  },
+
+  "conductor": {
+    "url": "http://conductor-server:8080/api/"
+  },
+
+  "mongo": {
+    "host": "mongo"
+  },
+
+  "githunter": {
+    "url": "http://host.docker.internal:3001"
+  }
 }
