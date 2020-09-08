@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoDBController = require('../database/server.controller');
 
-
 const init = middlewares => {
   const router = express.Router();
 
