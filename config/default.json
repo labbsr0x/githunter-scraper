@@ -1,8 +1,13 @@
 {
   "server": {
     "url": "localhost",
-    "port": 3005,
+    "port": 3002,
     "baseDir": "/"
+  },
+
+  "conductor": {
+    "url": "http://localhost:8080/api/",
+    "workerID": "node-worker"
   },
 
   "mongo": {
