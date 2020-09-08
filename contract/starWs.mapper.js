@@ -126,6 +126,12 @@ const commits = JM.makeConverter({
     author: input => {
       return `a:${input.author.substring(0, shortStringLen)}`;
     },
+    dono: input => {
+      return `o:${input.owner.substring(0, shortStringLen)}`;
+    },
+    name: input => {
+      return `n:${input.name.substring(0, shortStringLen)}`;
+    },
     provider: 'provider',
     type: JM.helpers.def('commits'),
   },
