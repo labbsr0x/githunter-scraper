@@ -7,14 +7,15 @@ const shortStringLen = 16;
 
 const code = JM.makeConverter({
   name: 'name',
+  owner: 'owner',
   description: 'description',
-  repoCreatedAt: data => utils.dateFormat4StarWS(data.createdAt),
+  repoCreatedAt: 'createdAt',
   primaryLanguage: 'primaryLanguage',
-  repositoryTopics: data => utils.concatArray4StarWS(data.repositoryTopics),
+  repositoryTopics: 'repositoryTopics',
   watchers: ['watchers', h.toString],
   stars: ['stars', h.toString],
   forks: ['forks', h.toString],
-  lastCommitDate: data => utils.dateFormat4StarWS(data.lastCommitDate),
+  lastCommitDate: 'lastCommitDate',
   commits: ['commits', h.toString],
   hasHomepageUrl: 'hasHomepageUrl',
   hasReadmeFile: 'hasReadmeFile',
@@ -24,11 +25,8 @@ const code = JM.makeConverter({
   releases: ['releases', h.toString],
   contributors: ['contributors', h.toString],
   languages: data => {
-    const { totalCount } = data.languages;
     const languages = data.languages.data.map(item => item.name);
-    return `totalCount: ${String(totalCount).concat(
-      `, languages: ${languages}`,
-    )}`;
+    return languages;
   },
   diskUsage: ['diskUsage', h.toString],
   provider: 'provider',

@@ -7,6 +7,9 @@ const codeInfoSchema = new Schema(
     name: {
       type: String,
     },
+    owner: {
+      type: String,
+    },
     description: {
       type: String,
     },
@@ -16,7 +19,9 @@ const codeInfoSchema = new Schema(
     primaryLanguage: {
       type: String,
     },
-    repositoryTopics: [String],
+    repositoryTopics: {
+      type: [String],
+    },
     watchers: {
       type: Number,
     },
