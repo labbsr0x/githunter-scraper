@@ -4,6 +4,7 @@ const Flags = require('./flags/Flags');
 const env = require('./env');
 const database = require('./database');
 const controller = require('./controller');
+const server = require('./server/server');
 const conductorClient = require('./conductor/client');
 
 const getScraperPoints = () => {
@@ -27,6 +28,7 @@ env.flags = flags;
 
 const scraperLocal = async () => {
   if (!flagsObj.isValid(flags)) {
+    console.log(`Required flags are necessary to run locally`);
     console.log(`Required fields: ${optionsFlag.requiredFlags.join(' | ')}`);
     console.log('\tUsage: ');
     console.log('\t\tnode main.js --scraperPoint <scraperPoint>');
@@ -34,14 +36,15 @@ const scraperLocal = async () => {
     console.log('\tExample: ');
     console.log('\t\tnode main.js --provider github --scraperPoint trending');
 
-    process.exit(0);
+    return false;
   }
 
   if (!knownScraperPoint.includes(flags.scraperPoint)) {
+    console.log(`Required flags are necessary to run locally`);
     console.log(`Unknown scraperPoint: ${flags.scraperPoint}`);
     console.log(`\tKnowns scraperPoint: ${knownScraperPoint.join(' | ')}`);
 
-    process.exit(0);
+    return false;
   }
 
   try {
@@ -49,16 +52,20 @@ const scraperLocal = async () => {
   } catch (error) {
     console.log(error);
   }
+  return true;
 };
 
 const run = async () => {
   await database.connectDB();
 
   if (flags.server) {
-    conductorClient();
-  } else {
-    scraperLocal();
+    server();
   }
+  if (flags.conductor) {
+    conductorClient();
+  }
+
+  scraperLocal();
 };
 
 run();
