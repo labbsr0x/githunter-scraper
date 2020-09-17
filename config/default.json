@@ -15,8 +15,8 @@
     "port": "27017",
     "database": "githunter-scraper",
     "credentials": {
-      "user": "githunter",
-      "password": "G1THuNt3R"
+      "user": "root",
+      "password": "root"
     }
   },
 
