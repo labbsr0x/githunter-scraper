@@ -21,7 +21,7 @@ class ManageDB {
     const connection =
       typeof this.config === 'string'
         ? this.config
-        : `mongodb://${credentials}${this.config.host}:${this.config.port}/${this.config.database}`;
+        : `mongodb://${credentials}${this.config.host}:${this.config.port}/${this.config.database}?authSource=admin`;
 
     // const options = this.config.ENV == 'prod' ? { autoIndex: false } : {};
 

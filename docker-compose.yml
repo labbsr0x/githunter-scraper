@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 
 services:
   schellar:
@@ -12,10 +12,10 @@ services:
     ports:
       - 3000:3000
     logging:
-      driver: 'json-file'
+      driver: "json-file"
       options:
-        max-size: '20MB'
-        max-file: '5'
+        max-size: "20MB"
+        max-file: "5"
     networks:
       - githunter-net
 
@@ -52,7 +52,7 @@ services:
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:5.6.8
     environment:
-      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       - transport.host=0.0.0.0
       - discovery.type=single-node
       - xpack.security.enabled=false
@@ -66,14 +66,11 @@ services:
     image: mongo
     restart: always
     environment:
-      MONGO_INITDB_DATABASE: githunter-scraper
-      MONGO_INITDB_ROOT_USERNAME: githunter
-      MONGO_INITDB_ROOT_PASSWORD: G1THuNt3R
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
       NODE_ENV: docker_dev
     volumes:
-      - ./data/mongo/001_users.js:/docker-entrypoint-initdb.d/001_users.js:ro
       - ./data/mongo/volume:/data/db
-      - mongodb_config:/data/configdb
     ports:
       - 27017:27017
     networks:

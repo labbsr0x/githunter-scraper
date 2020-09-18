@@ -20,7 +20,7 @@ const getMembers = async inputData => {
   }
 
   const normalizedMembers = [];
-  response.members.data.forEach(member => {
+  response.data.forEach(member => {
     normalizedMembers.push({ provider: inputData.provider, login: member });
   });
 
