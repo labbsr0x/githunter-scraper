@@ -30,14 +30,28 @@ const readInformation = async (node, sourceData) => {
   if (!response || (response.data && response.data.length === 0))
     return normalizedData;
 
-  if (!response.data && !Array.isArray(response)) {
-    response.data = [response];
+  // Sometimes the return is not an array
+  let arrayData = [];
+  if (response.data && Array.isArray(response.data)) {
+    arrayData = response.data;
+  } else if (!response.data && !Array.isArray(response)) {
+    arrayData = [response];
   }
-  Object.values(response.data).forEach(theData => {
+  // Save JSON Data
+  const rawDataPromise = [];
+  Object.values(arrayData).forEach((theData, index) => {
+    rawDataPromise[index] = starws.saveJSONData(theData);
+  });
+
+  const rawDataValues = await Promise.all(rawDataPromise);
+
+  Object.values(arrayData).forEach((theData, index) => {
+    const rawData = rawDataValues[index];
     normalizedData.push(
       theMaker({
         ...theData,
         ...sourceData,
+        rawData,
       }),
     );
   });

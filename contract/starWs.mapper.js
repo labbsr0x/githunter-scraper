@@ -1,9 +1,7 @@
-const moment = require('moment');
 const JM = require('json-mapper');
-const utils = require('../utils');
+const Utils = require('../utils');
 
 const h = JM.helpers;
-const shortStringLen = 16;
 
 const code = JM.makeConverter({
   name: 'name',
@@ -34,41 +32,45 @@ const code = JM.makeConverter({
 });
 
 const pulls = JM.makeConverter({
-  dateTime: () => moment().format('YYYY-MM-DDTHH:mm:ss.SSSSZ'),
+  dateTime: () => Utils.nanoSeconds(),
   fields: {
     number: ['number', h.toString],
     state: 'state',
-    createdAt: input => utils.dateFormat4StarWS(input.createdAt),
-    closedAt: input => utils.dateFormat4StarWS(input.closedAt),
+    createdAt: input => Utils.dateFormat4StarWS(input.createdAt),
+    closedAt: input => Utils.dateFormat4StarWS(input.closedAt),
     merged: ['merged', h.toString],
-    mergedAt: input => utils.dateFormat4StarWS(input.mergedAt),
-    author: input => {
-      return `a:${input.author.substring(0, shortStringLen)}`;
-    },
-    labels: input => utils.concatArray4StarWS(input.labels),
+    mergedAt: input => Utils.dateFormat4StarWS(input.mergedAt),
+    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
+    labels: input => Utils.concatArray4StarWS(input.labels),
     totalParticipants: ['participants.totalCount', h.toString],
     participants: input => {
       const participants =
         input.participants && input.participants.users
-          ? utils.concatArray4StarWS(input.participants.users)
+          ? Utils.concatArray4StarWS(input.participants.users)
           : '';
       return `p:${participants}`;
     },
     commentsTotal: ['comments.totalCount', h.toString],
     commentsUpdatedAt: input =>
-      utils.dateFormat4StarWS(input.comments.updatedAt),
+      Utils.dateFormat4StarWS(input.comments.updatedAt),
     comments: input => {
       const authors =
         input.comments && input.comments.data
           ? input.comments.data.map(item => item.author).join(',')
           : '';
-      return `a:${authors.substring(0, shortStringLen)}`;
+      return Utils.prepareString4StarWS(`a:${authors}`);
+    },
+    rawData: input => {
+      if (input.rawData) {
+        return input.rawData;
+      }
+      return `https://datajson/empty`;
     },
     dono: input => {
-      return `o:${input.owner.substring(0, shortStringLen)}`;
+      return `o:${input.owner}`;
     },
     name: input => {
-      return `n:${input.name.substring(0, shortStringLen)}`;
+      return `n:${input.name}`;
     },
     provider: 'provider',
     type: JM.helpers.def('pull'),
@@ -77,38 +79,44 @@ const pulls = JM.makeConverter({
 });
 
 const issues = JM.makeConverter({
-  dateTime: () => moment().format('YYYY-MM-DDTHH:mm:ss.SSSSZ'),
+  dateTime: () => Utils.nanoSeconds(),
   fields: {
     number: ['number', h.toString],
     state: 'state',
-    createdAt: input => utils.dateFormat4StarWS(input.createdAt),
-    closedAt: input => utils.dateFormat4StarWS(input.closedAt),
-    updatedAt: input => utils.dateFormat4StarWS(input.updatedAt),
-    author: 'author',
-    labels: input => utils.concatArray4StarWS(input.labels),
+    createdAt: input => Utils.dateFormat4StarWS(input.createdAt),
+    closedAt: input => Utils.dateFormat4StarWS(input.closedAt),
+    updatedAt: input => Utils.dateFormat4StarWS(input.updatedAt),
+    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
+    labels: input => Utils.concatArray4StarWS(input.labels),
     participantsTotalCount: ['participants.totalCount', h.toString],
     participants: input => {
       const participants =
         input.participants && input.participants.users
-          ? utils.concatArray4StarWS(input.participants.users)
+          ? Utils.concatArray4StarWS(input.participants.users)
           : '';
       return `p:${participants}`;
     },
     commentsTotalCount: ['comments.totalCount', h.toString],
     commentsUpdatedAt: input =>
-      utils.dateFormat4StarWS(input.comments.updatedAt),
+      Utils.dateFormat4StarWS(input.comments.updatedAt),
     comments: input => {
       const authors =
         input.comments && input.comments.data
           ? input.comments.data.map(item => item.author).join(',')
           : '';
-      return `a:${authors.substring(0, shortStringLen)}`;
+      return Utils.prepareString4StarWS(`a:${authors}`);
+    },
+    rawData: input => {
+      if (input.rawData) {
+        return input.rawData;
+      }
+      return `https://datajson/empty`;
     },
     dono: input => {
-      return `o:${input.owner.substring(0, shortStringLen)}`;
+      return `o:${input.owner}`;
     },
     name: input => {
-      return `n:${input.name.substring(0, shortStringLen)}`;
+      return `n:${input.name}`;
     },
     provider: 'provider',
     type: JM.helpers.def('issues'),
@@ -117,20 +125,24 @@ const issues = JM.makeConverter({
 });
 
 const commits = JM.makeConverter({
-  dateTime: () => moment().format('YYYY-MM-DDTHH:mm:ss.SSSSZ'),
+  dateTime: () => Utils.nanoSeconds(),
   fields: {
     message: input => {
-      return `m:${input.message.substring(0, shortStringLen)}`;
+      return Utils.prepareString4StarWS(`m:${input.message}`);
     },
-    committedDate: data => utils.dateFormat4StarWS(data.committedDate),
-    author: input => {
-      return `a:${input.author.substring(0, shortStringLen)}`;
+    committedDate: data => Utils.dateFormat4StarWS(data.committedDate),
+    author: input => Utils.prepareString4StarWS(`a:${input.author}`),
+    rawData: input => {
+      if (input.rawData) {
+        return input.rawData;
+      }
+      return `https://datajson/empty`;
     },
     dono: input => {
-      return `o:${input.owner.substring(0, shortStringLen)}`;
+      return `o:${input.owner}`;
     },
     name: input => {
-      return `n:${input.name.substring(0, shortStringLen)}`;
+      return `n:${input.name}`;
     },
     provider: 'provider',
     type: JM.helpers.def('commits'),
@@ -139,20 +151,22 @@ const commits = JM.makeConverter({
 });
 
 const userStats = JM.makeConverter({
-  dateTime: () => moment().format('YYYY-MM-DDTHH:mm:ss.SSSSZ'),
+  dateTime: () => Utils.nanoSeconds(),
   fields: {
-    name: input => {
-      return `n:${input.login.substring(0, shortStringLen)}`;
-    },
-    login: input => {
-      return `l:${input.login.substring(0, shortStringLen)}`;
-    },
+    name: ['name', h.toString],
+    login: ['login', h.toString],
     avatarUrl: 'avatarUrl',
     contributedRepositories: ['amount.contributedRepositories', h.toString],
     commits: ['amount.commits', h.toString],
     pullRequests: ['amount.pullRequests', h.toString],
     issuesOpened: ['amount.issuesOpened', h.toString],
     starsReceived: ['amount.starsReceived', h.toString],
+    rawData: input => {
+      if (input.rawData) {
+        return input.rawData;
+      }
+      return `https://datajson/empty`;
+    },
     followers: ['amount.followers', h.toString],
     provider: 'provider',
     type: JM.helpers.def('userStats'),
