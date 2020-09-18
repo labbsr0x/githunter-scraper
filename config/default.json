@@ -57,7 +57,8 @@
     "renewTokenInMinute": 800,
     "endpoints": {
       "auth": "/auth/realms/agrows/protocol/openid-connect/token",
-      "publishMetrics": "/v1/owner/gitfeed/thing/:provider/node/:node"
+      "publishMetrics": "/v1/owner/gitfeed/thing/:provider/node/:node",
+      "jsonDataAPI": "/v1/files/upload/jsondata"
     }
   }
 }
