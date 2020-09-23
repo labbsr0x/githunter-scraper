@@ -60,12 +60,11 @@ const run = async () => {
 
   if (flags.server) {
     server();
-  }
-  if (flags.conductor) {
+  } else if (flags.conductor) {
     conductorClient();
+  } else {
+    scraperLocal();
   }
-
-  scraperLocal();
 };
 
 run();

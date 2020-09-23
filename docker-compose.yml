@@ -6,8 +6,8 @@ services:
     environment:
       - CONDUCTOR_API_URL=http://conductor-server:8080/api
       - MONGO_ADDRESS=mongo
-      - MONGO_USERNAME=githunter
-      - MONGO_PASSWORD=G1THuNt3R
+      - MONGO_USERNAME=root
+      - MONGO_PASSWORD=root
       - LOG_LEVEL=info
     ports:
       - 3000:3000
@@ -76,7 +76,7 @@ services:
     networks:
       - githunter-net
 
-  api:
+  scraper:
     build: .
     image: githunter-scraper:1.0
     restart: always
