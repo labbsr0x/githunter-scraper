@@ -11,6 +11,8 @@ const controllerDatabase = async (req, res) => {
   const doc = await codeInfoRepository.find({ $or: repoList }, false);
 
   res.send({ data: doc });
+
+  return true;
 };
 
 module.exports = controllerDatabase;
