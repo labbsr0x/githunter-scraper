@@ -1,7 +1,7 @@
 const githunterApi = require('../githunter-api/controller');
 const codeInfoRepository = require('../database/repositories/CodeInfoRepository');
 const starws = require('../star-ws/controller');
-const contract = require('../contract/starWs.mapper');
+const contract = require('../contract/contract.mapper');
 
 const nodesSource = {
   pulls: githunterApi.getRepositoryPullsRequest,
@@ -23,8 +23,6 @@ const readCodePageInformation = async repo => {
 };
 
 const readInformation = async (node, sourceData) => {
-  const theMaker = contract[node];
-
   const normalizedData = [];
   const response = await nodesSource[node](sourceData);
   if (!response || (response.data && response.data.length === 0))
@@ -47,13 +45,11 @@ const readInformation = async (node, sourceData) => {
 
   Object.values(arrayData).forEach((theData, index) => {
     const rawData = rawDataValues[index];
-    normalizedData.push(
-      theMaker({
-        ...theData,
-        ...sourceData,
-        rawData,
-      }),
-    );
+    normalizedData.push({
+      ...theData,
+      ...sourceData,
+      rawData,
+    });
   });
 
   return normalizedData;
@@ -99,11 +95,11 @@ const saveStarWS = data => {
     const theData = data[theNode];
 
     const providers = new Map();
-    theData.map(item => providers.set(item.fields.provider, 1));
+    theData.map(item => providers.set(item.provider, 1));
 
     providers.forEach((_, theProvider) => {
       const providerData = theData.filter(
-        item => item.fields.provider === theProvider,
+        item => item.provider === theProvider,
       );
       if (theData && theData.length > 0)
         starws.publishMetrics(theProvider, theNode, providerData);
