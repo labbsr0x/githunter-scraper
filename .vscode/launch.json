@@ -93,6 +93,14 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}/githunter-scraper.js",
       "args": ["--server"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Server Conductor",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/githunter-scraper.js",
+      "args": ["--conductor"]
     }
   ]
 }

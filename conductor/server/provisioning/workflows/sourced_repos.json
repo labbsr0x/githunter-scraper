@@ -1,0 +1,19 @@
+{
+  "name": "sourced_repos",
+  "description": "Sourced data from repositories",
+  "version": 1,
+  "tasks": [
+    {
+      "name": "sourced_repos",
+      "taskReferenceName": "sourced",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "nodes": "${workflow.input.nodes}",
+        "sourceData": "${workflow.input.sourceData}"
+      }
+    }
+  ],
+  "restartable": true,
+  "workflowStatusListenerEnabled": true,
+  "schemaVersion": 2
+}
