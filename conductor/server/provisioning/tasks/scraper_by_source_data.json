@@ -1,6 +1,6 @@
 [
   {
-    "name": "sourced_repos",
+    "name": "scraper_by_source_data",
     "retryCount": 3,
     "timeoutSeconds": 3600,
     "timeoutPolicy": "TIME_OUT_WF",

@@ -121,16 +121,16 @@ const run = async ({
   console.log('Starting scraper process');
 
   try {
-    if (!scraperPoint && !sourceData) {
-      console.log('No scraperPoint and sourceData provided');
-      return;
-    }
-    // or sourceData length === 0
-    console.log(`Getting list of source data in scraper point ${scraperPoint}`);
-    if (!sourceData) {
+    if (!sourceData && scraperPoint) {
+      console.log(
+        `Getting list of source data in scraper point ${scraperPoint}`,
+      );
       // eslint-disable-next-line global-require
       const scraperMode = require(`./scraper/${scraperPoint}`);
       sourceData = await scraperMode({ provider, organization });
+    } else if (!sourceData && !scraperPoint) {
+      console.log('No scraperPoint and sourceData provided');
+      return;
     }
 
     console.log('Loading data from githunter-api');

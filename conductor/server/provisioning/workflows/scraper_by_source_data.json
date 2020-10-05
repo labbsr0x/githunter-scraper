@@ -1,11 +1,11 @@
 {
-  "name": "sourced_repos",
-  "description": "Sourced data from repositories",
+  "name": "scraper_by_source_data",
+  "description": "Scraped by sourced data",
   "version": 1,
   "tasks": [
     {
-      "name": "sourced_repos",
-      "taskReferenceName": "sourced",
+      "name": "scraper_by_source_data",
+      "taskReferenceName": "scraper",
       "type": "SIMPLE",
       "inputParameters": {
         "nodes": "${workflow.input.nodes}",
