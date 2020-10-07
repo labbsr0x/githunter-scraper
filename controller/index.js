@@ -107,26 +107,30 @@ const saveStarWS = data => {
   });
 };
 
-const run = async ({ scraperPoint, nodes, provider, organization }) => {
+const run = async ({
+  nodes,
+  provider,
+  scraperPoint,
+  organization,
+  sourceData,
+}) => {
   console.log('Starting scraper process');
 
   try {
-    if (!scraperPoint) {
-      console.log('No scraperPoint provided');
-      return;
-    }
-
-    console.log(`Getting list of source data in scraper point ${scraperPoint}`);
-    // eslint-disable-next-line global-require
-    const scraperMode = require(`./scraper/${scraperPoint}`);
-    const sourceData = await scraperMode({ provider, organization });
-
-    if (!sourceData) {
-      console.log('No source data for load.');
+    if (!sourceData && scraperPoint) {
+      console.log(
+        `Getting list of source data in scraper point ${scraperPoint}`,
+      );
+      // eslint-disable-next-line global-require
+      const scraperMode = require(`./scraper/${scraperPoint}`);
+      sourceData = await scraperMode({ provider, organization });
+    } else if (!sourceData && !scraperPoint) {
+      console.log('No scraperPoint and sourceData provided');
       return;
     }
 
     console.log('Loading data from githunter-api');
+    // sourceData is Array!
     const data = await loadDataFromGithunterAPI(sourceData, nodes);
 
     const hasData = Object.values(data).reduce(

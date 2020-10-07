@@ -1,0 +1,19 @@
+{
+  "name": "scraper_by_source_data",
+  "description": "Scraped by sourced data",
+  "version": 1,
+  "tasks": [
+    {
+      "name": "scraper_by_source_data",
+      "taskReferenceName": "scraper",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "nodes": "${workflow.input.nodes}",
+        "sourceData": "${workflow.input.sourceData}"
+      }
+    }
+  ],
+  "restartable": true,
+  "workflowStatusListenerEnabled": true,
+  "schemaVersion": 2
+}
