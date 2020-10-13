@@ -16,6 +16,7 @@ const code = JM.makeConverter({
   commits: ['commits', h.toString],
   hasHomepageUrl: 'hasHomepageUrl',
   hasReadmeFile: 'hasReadmeFile',
+  readmeFileSize: 'readmeFileSize',
   hasContributingFile: 'hasContributingFile',
   licenseInfo: 'licenseInfo',
   hasCodeOfConductFile: 'hasCodeOfConductFile',
