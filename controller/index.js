@@ -1,5 +1,5 @@
 const githunterApi = require('../githunter-api/controller');
-const codeInfoRepository = require('../database/repositories/CodeInfoRepository');
+const githunterDataProvider = require('../githunter-data-provider');
 const starws = require('../star-ws/controller');
 const contract = require('../contract/contract.mapper');
 
@@ -19,7 +19,7 @@ const readCodePageInformation = async repo => {
     ...repo,
   });
 
-  codeInfoRepository.save(normalizedData);
+  githunterDataProvider.saveCodeInfo(normalizedData);
 };
 
 const readInformation = async (node, sourceData) => {

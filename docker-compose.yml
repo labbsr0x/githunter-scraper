@@ -69,7 +69,6 @@ services:
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: root
-      NODE_ENV: docker_dev
     volumes:
       - ./data/mongo/volume:/data/db
     ports:
