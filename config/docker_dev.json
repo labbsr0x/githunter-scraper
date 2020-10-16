@@ -8,15 +8,15 @@
     "url": "http://conductor-server:8080/api/"
   },
 
-  "mongo": {
-    "host": "mongo"
-  },
-
   "githunter": {
     "url": "http://host.docker.internal:3001"
   },
-  
+
   "star-ws": {
     "urlData": "http://host.docker.internal:3005"
+  },
+
+  "githunter-data-provider": {
+    "url": "http://host.docker.internal:3333"
   }
 }

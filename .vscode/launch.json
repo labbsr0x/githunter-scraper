@@ -3,104 +3,15 @@
   // Hover to view descriptions of existing attributes.
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
-
   "configurations": [
     {
       "type": "node",
       "request": "launch",
-      "name": "Github Issues",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/githunter-scraper.js",
-      "args": ["--scraperPoint", "trending.github", "--nodes", "issues"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Github Commits",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/githunter-scraper.js",
-      "args": ["--scraperPoint", "trending.github", "--nodes", "commits"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Github Pulls",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/githunter-scraper.js",
-      "args": ["--scraperPoint", "trending.github", "--nodes", "pulls"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Github Code",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/githunter-scraper.js",
-      "args": ["--scraperPoint", "trending.github", "--nodes", "code"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Github Members",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/githunter-scraper.js",
-      "args": [
-        "--scraperPoint",
-        "organization.members",
-        "--nodes",
-        "userStats",
-        "--organization",
-        "bancodobrasil",
-        "--provider",
-        "github"
-      ]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Gitlab Issues",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/githunter-scraper.js",
-      "args": ["--scraperPoint", "trending.gitlab", "--nodes", "issues"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Gitlab Commits",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/githunter-scraper.js",
-      "args": ["--scraperPoint", "trending.gitlab", "--nodes", "commits"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Gitlab Pulls",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/githunter-scraper.js",
-      "args": ["--scraperPoint", "trending.gitlab", "--nodes", "pulls"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Gitlab Code",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/githunter-scraper.js",
-      "args": ["--scraperPoint", "trending.gitlab", "--nodes", "code"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Server REST",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/githunter-scraper.js",
-      "args": ["--server"]
-    },
-    {
-      "type": "node",
-      "request": "launch",
-      "name": "Server Conductor",
-      "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}/githunter-scraper.js",
-      "args": ["--conductor"]
+      "name": "Conductor Client",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/githunter-scraper.js"
     }
   ]
 }

@@ -10,16 +10,6 @@
     "workerID": "node-worker"
   },
 
-  "mongo": {
-    "host": "localhost",
-    "port": "27017",
-    "database": "githunter-scraper",
-    "credentials": {
-      "user": "root",
-      "password": "root"
-    }
-  },
-
   "githunter": {
     "url": "http://localhost:3001",
     "endpoints": {
@@ -32,20 +22,33 @@
     },
     "github": {
       "rateLimit": {
-        "personalToken": ["edf4422e3a32a69cb851b4076bbd59f56ceec997"],
+        "personalToken": [
+          "edf4422e3a32a69cb851b4076bbd59f56ceec997"
+        ],
         "minLimit": 50
       }
     },
     "gitlab": {
       "rateLimit": {
-        "personalToken": ["3p46Ss7APzGvTWtbAusm"]
+        "personalToken": [
+          "3p46Ss7APzGvTWtbAusm"
+        ]
       }
     }
   },
+
   "github": {
     "url": "https://api.github.com",
     "rateLimitPath": "/rate_limit"
   },
+
+  "githunter-data-provider": {
+    "url": "http://localhost:3333",
+    "endpoints": {
+      "codeInfo": "/code-info"
+    }
+  },
+
   "star-ws": {
     "urlData": "http://localhost:3005",
     "endpoints": {
