@@ -3,6 +3,7 @@ const githunterDataProvider = require('../githunter-data-provider');
 const starws = require('../star-ws/controller');
 const contract = require('../contract/contract.mapper');
 const logger = require('../config/logger');
+const contractResponse = require('../contract/contract.response.mapper');
 
 const nodesSource = {
   pulls: githunterApi.getRepositoryPullsRequest,
@@ -141,6 +142,16 @@ const run = async ({
     if (hasData) {
       logger.info('Save data in StarWS');
       saveStarWS(data);
+
+      // Build the response
+      data.map((d, node) => {
+        const mapper = contractResponse[node];
+        if (mapper) {
+          return mapper(d);
+        }
+        return undefined;
+      });
+      console.log(data);
     }
   } catch (e) {
     logger.error(`error in controller!\n${e}`);
