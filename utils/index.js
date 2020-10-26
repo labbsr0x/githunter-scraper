@@ -2,6 +2,7 @@ const moment = require('moment');
 
 const utils = (() => {
   return {
+    dateCounter: 0,
     dateFormat4StarWS: data => {
       if (!data) {
         return moment(0).format();
@@ -28,9 +29,11 @@ const utils = (() => {
       return str.substring(0, shortStringLen);
     },
     nanoSeconds: () => {
-      const hrTime = process.hrtime();
-      const nTime = `${hrTime[0] * 1000000000}${hrTime[1]}`;
-      const nSec = nTime.substr(nTime.length - 5);
+      // const hrTime = process.hrtime();
+      // const nTime = `${hrTime[0] * 1000000000}${hrTime[1]}`;
+      // const nSec = nTime.substr(nTime.length - 4);
+      const nSec = `${utils.dateCounter}`.padStart(3, '0');
+      utils.dateCounter += 1;
       return moment().format(`YYYY-MM-DDTHH:mm:ss.SSS${nSec}Z`);
     },
   };

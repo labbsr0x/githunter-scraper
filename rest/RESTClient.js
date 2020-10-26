@@ -33,20 +33,6 @@ class Http {
     });
   }
 
-  patch(path, payload, callback) {
-    return this.service
-      .request({
-        method: 'PATCH',
-        url: this.service.defaults.url + path,
-        responseType: 'json',
-        data: payload,
-      })
-      .then(response => callback(response.status, response.data))
-      .catch(err => {
-        console.log(err);
-      });
-  }
-
   post(path, payload, headers, url = null) {
     return this.service.request({
       method: 'POST',

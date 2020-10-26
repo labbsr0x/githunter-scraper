@@ -8,6 +8,7 @@ const nodesSource = {
   issues: githunterApi.getRepositoryIssues,
   commits: githunterApi.getRepositoryCommits,
   userStats: githunterApi.getUserStats,
+  comments: githunterApi.getComments,
 };
 
 const readCodePageInformation = async repo => {
@@ -140,6 +141,8 @@ const run = async ({
     if (hasData) {
       console.log('Save data in StarWS');
       saveStarWS(data);
+
+      // console.log(data);
     }
   } catch (e) {
     console.log('error in controller');
