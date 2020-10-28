@@ -1,3 +1,4 @@
+const logger = require('../../../config/logger');
 const githunterApi = require('../../../githunter-api/controller');
 
 const getMembers = async inputData => {
@@ -6,7 +7,9 @@ const getMembers = async inputData => {
     (inputData && !inputData.organization) ||
     (inputData && !inputData.provider)
   ) {
-    console.log('No `organization` or `provider` flag defined.');
+    logger.info(
+      'CONTROLLER -> Members: No `organization` or `provider` flag defined.',
+    );
     return false;
   }
   const req = {

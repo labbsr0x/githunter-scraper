@@ -1,8 +1,11 @@
+const logger = require('../../../config/logger');
 const controller = require('../../../controller');
 
 const sourcedRepos = async (data, updater) => {
   try {
-    console.log(`Start task ${data.taskType} with input:`, data.inputData);
+    logger.info(
+      `CONDUCTOR -> Sourced Data: Start task ${data.taskType} with input: ${data.inputData}`,
+    );
 
     await controller.run(data.inputData);
     updater.complete({});

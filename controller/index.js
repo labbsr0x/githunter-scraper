@@ -2,6 +2,7 @@ const githunterApi = require('../githunter-api/controller');
 const githunterDataProvider = require('../githunter-data-provider');
 const starws = require('../star-ws/controller');
 const contract = require('../contract/contract.mapper');
+const logger = require('../config/logger');
 
 const nodesSource = {
   pulls: githunterApi.getRepositoryPullsRequest,
@@ -63,7 +64,7 @@ const loadDataFromGithunterAPI = async (sourceData, nodes) => {
       try {
         readCodePageInformation(data);
       } catch (e) {
-        console.log(e);
+        logger.error(e);
       }
     }
 
@@ -78,7 +79,7 @@ const loadDataFromGithunterAPI = async (sourceData, nodes) => {
             normalizedData[node] = normalizedData[node].concat(info);
           }
         } catch (e) {
-          console.log(e);
+          logger.error(e);
         }
       }
     }
@@ -114,22 +115,22 @@ const run = async ({
   organization,
   sourceData,
 }) => {
-  console.log('Starting scraper process');
+  logger.info('Starting scraper process');
 
   try {
     if (!sourceData && scraperPoint) {
-      console.log(
+      logger.info(
         `Getting list of source data in scraper point ${scraperPoint}`,
       );
       // eslint-disable-next-line global-require
       const scraperMode = require(`./scraper/${scraperPoint}`);
       sourceData = await scraperMode({ provider, organization });
     } else if (!sourceData && !scraperPoint) {
-      console.log('No scraperPoint and sourceData provided');
+      logger.error('No scraperPoint and sourceData provided');
       return;
     }
 
-    console.log('Loading data from githunter-api');
+    logger.info('Loading data from githunter-api');
     // sourceData is Array!
     const data = await loadDataFromGithunterAPI(sourceData, nodes);
 
@@ -138,12 +139,11 @@ const run = async ({
       0,
     );
     if (hasData) {
-      console.log('Save data in StarWS');
+      logger.info('Save data in StarWS');
       saveStarWS(data);
     }
   } catch (e) {
-    console.log('error in controller');
-    console.log(e);
+    logger.error(`error in controller!\n${e}`);
   }
 };
 

@@ -1,5 +1,6 @@
 const config = require('config');
 const Route = require('route-parser');
+const logger = require('../config/logger');
 const HttpClient = require('../rest/RESTClient');
 
 const starwsConfig = config.get('star-ws');
@@ -15,10 +16,10 @@ const publishMetrics = async (provider, node, data) => {
 
   try {
     const response = await httpClient.post(endPoint, data);
-    console.log(response);
+    logger.info(`POST Request to save data intro AgroWS successfully!`);
     return response;
   } catch (e) {
-    console.log(e);
+    logger.error(`POST Request to save data intro AgroWS failure!\n${e}`);
   }
   return false;
 };
@@ -30,10 +31,10 @@ const saveJSONData = async data => {
     if (response.status === 200 && response.data && response.data.link) {
       return response.data.link;
     }
-    console.log(response);
+    logger.info(`POST Request to save JSON-data intro AgroWS successfully!`);
     return false;
   } catch (e) {
-    console.log(e);
+    logger.error(`POST Request to save JSON-data intro AgroWS failure!\n${e}`);
   }
   return false;
 };

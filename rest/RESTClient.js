@@ -1,4 +1,5 @@
 const axios = require('axios').default;
+const logger = require('../config/logger');
 
 class Http {
   constructor({ url, headers, accessToken }) {
@@ -43,7 +44,7 @@ class Http {
       })
       .then(response => callback(response.status, response.data))
       .catch(err => {
-        console.log(err);
+        logger.error(`PATCH Request to RESTClient(Http) failure! \n${err}`);
       });
   }
 

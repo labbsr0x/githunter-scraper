@@ -1,11 +1,12 @@
 const ConductorClient = require('conductor-client').default;
 const configConductor = require('config').get('conductor');
 
+const logger = require('../../config/logger');
 const tasks = require('./tasks');
 
 class Client {
   constructor() {
-    console.log(
+    logger.info(
       `Start conductor client on ${configConductor.url} with workerID ${configConductor.workerID}`,
     );
 
