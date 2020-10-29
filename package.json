@@ -40,7 +40,8 @@
     "mongoose": "^5.9.25",
     "path": "^0.12.7",
     "qs": "^6.9.4",
-    "route-parser": "0.0.5"
+    "route-parser": "0.0.5",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",

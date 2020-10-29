@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 const config = require('config');
+const logger = require('../config/logger');
 const HttpClient = require('../rest/RESTClient');
 
 const githunterConfig = config.get('githunter');
@@ -23,12 +24,17 @@ const hasRateLimit = async accessToken => {
     const response = await httpClientGithub.get(gitHubConfig.rateLimitPath);
 
     if (response && response.data && response.data.resources) {
+      logger.debug(
+        `GET Request to Githunter-API ratelimit from Github successfully!`,
+      );
       return response.data.resources.graphql;
     }
 
     return null;
   } catch (err) {
-    console.log(err);
+    logger.error(
+      `GET Request to Githunter-API ratelimit from Github failure!: \n${err}`,
+    );
 
     return null;
   }
@@ -76,7 +82,9 @@ const sendGetToGithunter = async (path, data) => {
   const accessToken = await getValidToken(data.provider);
 
   if (!accessToken) {
-    console.error('No token available for consume githunter API.');
+    logger.error(
+      'Githunter-API: No token available for consume githunter API.',
+    );
     return null;
   }
 
@@ -89,12 +97,15 @@ const sendGetToGithunter = async (path, data) => {
     const response = await httpClient.get(path, data);
 
     if (response && response.data) {
+      logger.debug(`GET Request to Githunter-API with token is valid!`);
       return response.data;
     }
 
     return null;
   } catch (err) {
-    console.log(err);
+    logger.error(
+      `GET Request to Githunter-API with token is invalid! \n${err}`,
+    );
 
     return null;
   }

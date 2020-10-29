@@ -1,17 +1,18 @@
+const logger = require('../../../config/logger');
 const c = require('../../../crawler/crawler');
 const config = require('./config');
 
 const callback = async (error, res, done) => {
   if (error) {
-    console.log(error);
+    logger.error(error);
     done();
 
     throw new Error(error);
   }
 
   if (res && res.statusCode !== 200) {
-    console.log(
-      `Error requesting page: ${res.options.uri}, Status Code: ${res.statusCode}`,
+    logger.error(
+      `CONTROLLER -> Trending Github: Error requesting page: ${res.options.uri}, Status Code: ${res.statusCode}`,
     );
 
     if (res.statusCode === 429) {
