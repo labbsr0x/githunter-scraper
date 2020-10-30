@@ -108,8 +108,7 @@ const sendGetToGithunter = async (path, data) => {
     logger.error(
       `GET Request to Githunter-API with token is invalid! \n${err}`,
     );
-
-    return null;
+    throw err;
   }
 };
 
@@ -117,7 +116,7 @@ const sendPostToGithunter = async (path, data, body) => {
   const accessToken = await getValidToken(data.provider);
 
   if (!accessToken) {
-    console.error('No token available for consume githunter API.');
+    logger.error('No token available for consume githunter API.');
     return null;
   }
 
@@ -136,9 +135,8 @@ const sendPostToGithunter = async (path, data, body) => {
 
     return null;
   } catch (err) {
-    console.log(err);
-
-    return null;
+    logger.log(err);
+    throw err;
   }
 };
 
