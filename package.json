@@ -36,6 +36,7 @@
     "export-files": "^2.1.1",
     "express": "^4.17.1",
     "json-mapper": "0.0.12",
+    "lodash": "^4.17.20",
     "moment": "^2.27.0",
     "mongoose": "^5.9.25",
     "path": "^0.12.7",

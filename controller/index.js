@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const githunterApi = require('../githunter-api/controller');
 const githunterDataProvider = require('../githunter-data-provider');
 const starws = require('../star-ws/controller');
@@ -98,7 +99,7 @@ const saveStarWS = data => {
     const providers = new Map();
     theData.map(item => providers.set(item.provider, 1));
 
-    providers.forEach((_, theProvider) => {
+    providers.forEach((v, theProvider) => {
       const providerData = theData.filter(
         item => item.provider === theProvider,
       );
@@ -127,7 +128,7 @@ const run = async ({
       sourceData = await scraperMode({ provider, organization });
     } else if (!sourceData && !scraperPoint) {
       console.log('No scraperPoint and sourceData provided');
-      return;
+      return {};
     }
 
     console.log('Loading data from githunter-api');
@@ -143,18 +144,45 @@ const run = async ({
       saveStarWS(data);
 
       // Build the response
-      data.map((d, node) => {
-        const mapper = contractResponse[node];
-        if (mapper) {
-          return mapper(d);
+      const mappedData = {};
+      const mappedObj = {};
+      Object.keys(data).forEach(node => {
+        mappedData[node] = data[node].map(item => {
+          const mapper = contractResponse[node];
+          if (mapper) {
+            return mapper(item);
+          }
+          return {};
+        });
+
+        // Transform an array of object in object of array grouping by keys
+        mappedData[node].map(item => {
+          Object.keys(item).map(val => {
+            if (!mappedObj[node]) mappedObj[node] = {};
+            mappedObj[node][val] = mappedObj[node][val]
+              ? _.concat(mappedObj[node][val], item[val])
+              : item[val];
+            return val;
+          });
+          return item;
+        });
+
+        // Removing empty values
+        if (mappedObj[node]) {
+          Object.keys(mappedObj[node]).map(key => {
+            mappedObj[node][key] = _.compact(mappedObj[node][key]);
+            return key;
+          });
         }
-        return undefined;
       });
-      console.log(data);
+
+      return mappedObj;
     }
+    return {};
   } catch (e) {
     console.log('error in controller');
     console.log(e);
+    return e;
   }
 };
 
