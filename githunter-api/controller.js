@@ -1,7 +1,9 @@
 /* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
 const config = require('config');
+const qs = require('qs');
 const logger = require('../config/logger');
+
 const HttpClient = require('../rest/RESTClient');
 
 const githunterConfig = config.get('githunter');
@@ -106,8 +108,35 @@ const sendGetToGithunter = async (path, data) => {
     logger.error(
       `GET Request to Githunter-API with token is invalid! \n${err}`,
     );
+    throw err;
+  }
+};
+
+const sendPostToGithunter = async (path, data, body) => {
+  const accessToken = await getValidToken(data.provider);
+
+  if (!accessToken) {
+    logger.error('No token available for consume githunter API.');
+    return null;
+  }
+
+  try {
+    httpClient.addAccessToken(accessToken);
+    data = {
+      ...data,
+      access_token: accessToken,
+    };
+    const stringURL = qs.stringify(data);
+    const response = await httpClient.post(`${path}?${stringURL}`, body);
+
+    if (response && response.data) {
+      return response.data;
+    }
 
     return null;
+  } catch (err) {
+    logger.log(err);
+    throw err;
   }
 };
 
@@ -138,6 +167,16 @@ const getUserStats = async params => {
   return sendGetToGithunter(githunterConfig.endpoints.userStats, params);
 };
 
+const getComments = async params => {
+  const { idsList } = params;
+  delete params.idsList;
+  return sendPostToGithunter(
+    githunterConfig.endpoints.comments,
+    params,
+    idsList,
+  );
+};
+
 module.exports = {
   getCodePageInformation,
   getRepositoryCommits,
@@ -145,4 +184,5 @@ module.exports = {
   getRepositoryIssues,
   getOrganizationMembers,
   getUserStats,
+  getComments,
 };

@@ -3,6 +3,7 @@ const logger = require('../config/logger');
 
 const utils = (() => {
   return {
+    dateCounter: 0,
     dateFormat4StarWS: data => {
       if (!data) {
         logger.debug(`UTILS dateFormat4StarWS: Date content is invalid!`);
@@ -49,12 +50,11 @@ const utils = (() => {
       return str.substring(0, shortStringLen);
     },
     nanoSeconds: () => {
-      const hrTime = process.hrtime();
-      const nTime = `${hrTime[0] * 1000000000}${hrTime[1]}`;
-      const nSec = nTime.substr(nTime.length - 5);
-
-      logger.debug(`UTIL nanoSeconds: Nanosecond gerated successfully!`);
-      return moment().format(`YYYY-MM-DDTHH:mm:ss.SSS${nSec}Z`);
+      const nSec = `${utils.dateCounter}`.padStart(3, '0');
+      utils.dateCounter += 1;
+      const d = moment().format(`YYYY-MM-DDTHH:mm:ss.SSS${nSec}Z`);
+      logger.debug(`UTIL nanoSeconds: ${d}`);
+      return d;
     },
   };
 })();
