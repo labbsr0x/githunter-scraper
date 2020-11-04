@@ -7,6 +7,8 @@ const issues = JM.makeConverter({
     }
     return [];
   },
+  provider: 'provider',
+  type: 'node',
 });
 
 const pulls = JM.makeConverter({
@@ -16,6 +18,8 @@ const pulls = JM.makeConverter({
     }
     return [];
   },
+  provider: 'provider',
+  type: 'node',
 });
 
 module.exports = {

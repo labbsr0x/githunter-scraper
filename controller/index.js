@@ -53,6 +53,7 @@ const readInformation = async (node, sourceData) => {
       ...theData,
       ...sourceData,
       rawData,
+      node,
     });
   });
 
@@ -147,35 +148,41 @@ const run = async ({
 
       // Build the response
       const mappedData = {};
-      const mappedObj = {};
+      const mappedObj = [];
       Object.keys(data).forEach(node => {
         mappedData[node] = data[node].map(item => {
           const mapper = contractResponse[node];
           if (mapper) {
-            return mapper(item);
+            return mapper({ ...item, node });
           }
           return {};
         });
 
         // Transform an array of object in object of array grouping by keys
+        const mergedObj = {};
         mappedData[node].map(item => {
           Object.keys(item).map(val => {
-            if (!mappedObj[node]) mappedObj[node] = {};
-            mappedObj[node][val] = mappedObj[node][val]
-              ? _.concat(mappedObj[node][val], item[val])
-              : item[val];
+            mergedObj[val] =
+              mergedObj[val] && mergedObj[val].length > 0
+                ? _.concat(mergedObj[val], item[val])
+                : item[val];
             return val;
           });
           return item;
         });
 
-        // Removing empty values
-        if (mappedObj[node]) {
-          Object.keys(mappedObj[node]).map(key => {
-            mappedObj[node][key] = _.compact(mappedObj[node][key]);
-            return key;
-          });
-        }
+        // Removing empty values and duplicated values (if array has one item, remove from array)
+        Object.keys(mergedObj).map(key => {
+          mergedObj[key] = _.compact(mergedObj[key]);
+          mergedObj[key] = _.uniqBy(mergedObj[key]);
+          if (Array.isArray(mergedObj[key]) && mergedObj[key].length === 1) {
+            // eslint-disable-next-line prefer-destructuring
+            mergedObj[key] = mergedObj[key][0];
+          }
+          return key;
+        });
+
+        mappedObj.push(mergedObj);
       });
 
       return mappedObj;
