@@ -1,0 +1,19 @@
+{
+  "name": "scraper_comments",
+  "description": "Scraps data from repositories",
+  "version": 1,
+  "tasks": [
+    {
+      "name": "scraper_comments",
+      "taskReferenceName": "scraper",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "sourceData": "${workflow.input.sourceData}",
+        "nodes": "${workflow.input.nodes}"
+      }
+    }
+  ],
+  "restartable": true,
+  "workflowStatusListenerEnabled": true,
+  "schemaVersion": 2
+}

@@ -168,13 +168,11 @@ const getUserStats = async params => {
 };
 
 const getComments = async params => {
-  const { idsList } = params;
-  delete params.idsList;
-  return sendPostToGithunter(
-    githunterConfig.endpoints.comments,
-    params,
-    idsList,
-  );
+  const { ids } = params;
+  delete params.ids;
+  return sendPostToGithunter(githunterConfig.endpoints.comments, params, {
+    ids,
+  });
 };
 
 module.exports = {
