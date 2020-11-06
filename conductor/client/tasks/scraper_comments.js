@@ -5,7 +5,7 @@ const controller = require('../../../controller');
 const scraperComments = async (data, updater) => {
   try {
     logger.info(
-      `CONDUCTOR -> Scraper Comments: Start task ${data.taskType} with input: `,
+      `CONDUCTOR -> Scraper Comments: Start task ${data.taskType} with input: %j`,
       data.inputData,
     );
 
@@ -27,7 +27,7 @@ const scraperComments = async (data, updater) => {
 
     updater.complete({ outputData });
   } catch (error) {
-    updater.fail({ reasonForIncompletion: error });
+    updater.fail({ reasonForIncompletion: error.message, outputData: error });
   }
 };
 

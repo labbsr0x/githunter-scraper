@@ -68,7 +68,7 @@ const loadDataFromGithunterAPI = async (sourceData, nodes) => {
       try {
         readCodePageInformation(data);
       } catch (e) {
-        logger.error(e);
+        logger.error(`%j`, e);
       }
     }
 
@@ -83,7 +83,8 @@ const loadDataFromGithunterAPI = async (sourceData, nodes) => {
             normalizedData[node] = normalizedData[node].concat(info);
           }
         } catch (e) {
-          logger.error(e);
+          logger.error(`%j`, e);
+          throw e;
         }
       }
     }
@@ -95,7 +96,8 @@ const loadDataFromGithunterAPI = async (sourceData, nodes) => {
   return normalizedData;
 };
 
-const saveStarWS = data => {
+const saveStarWS = async data => {
+  const promissePublish = [];
   Object.keys(data).forEach(theNode => {
     const theData = data[theNode];
 
@@ -107,9 +109,28 @@ const saveStarWS = data => {
         item => item.provider === theProvider,
       );
       if (theData && theData.length > 0)
-        starws.publishMetrics(theProvider, theNode, providerData);
+        promissePublish.push(
+          starws.publishMetrics(theProvider, theNode, providerData),
+        );
     });
   });
+  const endPromisse = await Promise.all(promissePublish);
+  const errorRequest = endPromisse.filter(
+    resp => resp && resp.status && resp.status !== 201,
+  );
+  if (errorRequest && errorRequest.length > 0) {
+    const err = new Error('Error requesting bind-starws.');
+    err.errorRequest = errorRequest.map(resp => {
+      return {
+        status: resp.status,
+        data: resp.data && resp.data.data ? resp.data.data : [],
+        code: resp.data && resp.data.code ? resp.data.code : 0,
+        message:
+          resp.data && resp.data.message ? resp.data.message : 'Unknown Error',
+      };
+    });
+    throw err;
+  }
 };
 
 const run = async ({
@@ -130,8 +151,9 @@ const run = async ({
       const scraperMode = require(`./scraper/${scraperPoint}`);
       sourceData = await scraperMode({ provider, organization });
     } else if (!sourceData && !scraperPoint) {
-      logger.error('No scraperPoint and sourceData provided');
-      return {};
+      const msg = 'No scraperPoint and sourceData provided';
+      logger.error(msg);
+      throw new Error(msg);
     }
 
     logger.info('Loading data from githunter-api');
@@ -144,7 +166,7 @@ const run = async ({
     );
     if (hasData) {
       logger.info('Save data in StarWS');
-      saveStarWS(data);
+      await saveStarWS(data);
 
       // Build the response
       const mappedData = {};
@@ -189,7 +211,14 @@ const run = async ({
     }
     return {};
   } catch (e) {
-    logger.error(`error in controller!`, e);
+    logger.error(`Error Scraper: ${e.message}`);
+    logger.error(`%j`, {
+      nodes,
+      provider,
+      scraperPoint,
+      organization,
+      sourceData,
+    });
     throw e;
   }
 };

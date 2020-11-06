@@ -16,12 +16,13 @@ const publishMetrics = async (provider, node, data) => {
 
   try {
     const response = await httpClient.post(endPoint, data);
-    logger.info(`POST Request to save data intro AgroWS successfully!`);
+    logger.debug(`POST Request to save data intro AgroWS successfully!`);
     return response;
   } catch (e) {
-    logger.error(`POST Request to save data intro AgroWS failure!\n${e}`);
+    logger.error(`POST Request to save data intro AgroWS: ${e.message}`);
+    logger.error(`%j`, e);
+    throw e;
   }
-  return false;
 };
 
 const saveJSONData = async data => {
@@ -31,12 +32,12 @@ const saveJSONData = async data => {
     if (response.status === 200 && response.data && response.data.link) {
       return response.data.link;
     }
-    logger.info(`POST Request to save JSON-data intro AgroWS successfully!`);
+    logger.debug(`POST Request to save JSON-data intro AgroWS successfully!`);
     return false;
   } catch (e) {
-    logger.error(`POST Request to save JSON-data intro AgroWS failure!\n${e}`);
+    logger.error(`POST Request to save JSON-data intro AgroWS: ${e.message}`);
+    throw e;
   }
-  return false;
 };
 
 module.exports = {
