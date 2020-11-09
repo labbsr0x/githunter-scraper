@@ -35,10 +35,10 @@ const hasRateLimit = async accessToken => {
     return null;
   } catch (err) {
     logger.error(
-      `GET Request to Githunter-API ratelimit from Github failure!: \n${err}`,
+      `GET Request to Githunter-API ratelimit from Github failure!: %j`,
+      err,
     );
-
-    return null;
+    throw err;
   }
 };
 
@@ -81,16 +81,16 @@ const getValidToken = async provider => {
 };
 
 const sendGetToGithunter = async (path, data) => {
-  const accessToken = await getValidToken(data.provider);
-
-  if (!accessToken) {
-    logger.error(
-      'Githunter-API: No token available for consume githunter API.',
-    );
-    return null;
-  }
-
   try {
+    const accessToken = await getValidToken(data.provider);
+
+    if (!accessToken) {
+      const msg =
+        'Githunter-API: No token available for consume githunter API.';
+      logger.error(msg);
+      throw new Error(msg);
+    }
+
     httpClient.addAccessToken(accessToken);
     data = {
       ...data,
@@ -105,22 +105,23 @@ const sendGetToGithunter = async (path, data) => {
 
     return null;
   } catch (err) {
-    logger.error(
-      `GET Request to Githunter-API with token is invalid! \n${err}`,
-    );
+    logger.debug(`GET Request to Githunter-API: ${err.message}`);
+    logger.debug(`%j`, err);
     throw err;
   }
 };
 
 const sendPostToGithunter = async (path, data, body) => {
-  const accessToken = await getValidToken(data.provider);
-
-  if (!accessToken) {
-    logger.error('No token available for consume githunter API.');
-    return null;
-  }
-
   try {
+    const accessToken = await getValidToken(data.provider);
+
+    if (!accessToken) {
+      const msg =
+        'Githunter-API: No token available for consume githunter API.';
+      logger.error(msg);
+      throw new Error(msg);
+    }
+
     httpClient.addAccessToken(accessToken);
     data = {
       ...data,
@@ -135,7 +136,8 @@ const sendPostToGithunter = async (path, data, body) => {
 
     return null;
   } catch (err) {
-    logger.log(err);
+    logger.debug(`POST Request to Githunter-API: ${err.message}`);
+    logger.debug(`%j`, err);
     throw err;
   }
 };

@@ -18,9 +18,8 @@ const saveCodeInfo = async data => {
 
     return null;
   } catch (err) {
-    logger.error(`POST Request to Githunter-Data-Provider failure!\n${err}`);
-
-    return null;
+    logger.error(`POST Request to Githunter-Data-Provider: ${err.message}`);
+    throw err;
   }
 };
 
