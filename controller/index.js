@@ -23,7 +23,7 @@ const readCodePageInformation = async repo => {
     ...repo,
   });
 
-  githunterDataProvider.saveCodeInfo(normalizedData);
+  await githunterDataProvider.saveCodeInfo(normalizedData);
 };
 
 const readInformation = async (node, sourceData) => {
@@ -66,9 +66,10 @@ const loadDataFromGithunterAPI = async (sourceData, nodes) => {
   const promises = sourceData.map(async data => {
     if (!nodes || (nodes && nodes.includes('code'))) {
       try {
-        readCodePageInformation(data);
+        await readCodePageInformation(data);
       } catch (e) {
         logger.error(`%j`, e);
+        throw e;
       }
     }
 
