@@ -8,10 +8,10 @@ const getMembers = async inputData => {
       (inputData && !inputData.organization) ||
       (inputData && !inputData.provider)
     ) {
-      logger.info(
-        'CONTROLLER -> Members: No `organization` or `provider` flag defined.',
-      );
-      return false;
+      const msg =
+        'CONTROLLER -> Members: No `organization` or `provider` flag defined.';
+      logger.info(msg);
+      throw new Error(msg);
     }
     const req = {
       provider: inputData.provider,
@@ -20,7 +20,9 @@ const getMembers = async inputData => {
     const response = await githunterApi.getOrganizationMembers(req);
 
     if (!response) {
-      return false;
+      const msg = `CONTROLLER -> Members: no data found for provider: ${inputData.provider} and organization: ${inputData.organization}`;
+      logger.info(msg);
+      throw new Error(msg);
     }
 
     const normalizedMembers = [];
