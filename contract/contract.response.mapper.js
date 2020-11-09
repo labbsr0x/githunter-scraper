@@ -22,7 +22,14 @@ const pulls = JM.makeConverter({
   type: 'node',
 });
 
+const userStats = JM.makeConverter({
+  repositories: 'contributedRepositories',
+  provider: 'provider',
+  type: 'node',
+});
+
 module.exports = {
   issues,
   pulls,
+  userStats,
 };
