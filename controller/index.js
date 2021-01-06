@@ -39,20 +39,11 @@ const readInformation = async (node, sourceData) => {
   } else if (!response.data && !Array.isArray(response)) {
     arrayData = [response];
   }
-  // Save JSON Data
-  const rawDataPromise = [];
-  Object.values(arrayData).forEach((theData, index) => {
-    rawDataPromise[index] = starws.saveJSONData(theData);
-  });
 
-  const rawDataValues = await Promise.all(rawDataPromise);
-
-  Object.values(arrayData).forEach((theData, index) => {
-    const rawData = rawDataValues[index];
+  Object.values(arrayData).forEach((theData) => {
     normalizedData.push({
       ...theData,
       ...sourceData,
-      rawData,
       node,
     });
   });
@@ -111,7 +102,7 @@ const saveStarWS = async data => {
       );
       if (theData && theData.length > 0)
         promissePublish.push(
-          starws.publishMetrics(theProvider, theNode, providerData),
+          starws.publishMetrics(theProvider, theNode, providerData, true),
         );
     });
   });
