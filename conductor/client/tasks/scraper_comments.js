@@ -27,7 +27,14 @@ const scraperComments = async (data, updater) => {
 
     updater.complete({ outputData: { sourceData: outputData } });
   } catch (error) {
-    updater.fail({ reasonForIncompletion: error.message, outputData: error });
+    updater.fail({
+      reasonForIncompletion:
+        error && error.message ? error.message : 'Unknown error.',
+      outputData:
+        error && error.response && error.response.data
+          ? error.response.data
+          : error,
+    });
   }
 };
 
