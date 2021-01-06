@@ -9,7 +9,7 @@ const scraperReposAllNodes = async (data, updater) => {
     );
 
     const outputData = await controller.run(data.inputData.scraperPoint);
-    updater.complete({ outputData });
+    updater.complete({ outputData: { sourceData: outputData } });
   } catch (error) {
     updater.fail({ reasonForIncompletion: error.message, outputData: error });
   }

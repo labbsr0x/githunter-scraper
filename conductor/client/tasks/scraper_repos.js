@@ -11,7 +11,11 @@ const scraperRepos = async (data, updater) => {
     const outputData = await controller.run(data.inputData);
     updater.complete({ outputData: { sourceData: outputData } }); // the outputData couldn't be an array.
   } catch (error) {
-    updater.fail({ reasonForIncompletion: error.message, outputData: error });
+    updater.fail({
+      reasonForIncompletion: error.message,
+      outputData:
+        error.response && error.response.data ? error.response.data : error,
+    });
   }
 };
 

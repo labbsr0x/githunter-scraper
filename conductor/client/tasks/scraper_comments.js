@@ -25,7 +25,7 @@ const scraperComments = async (data, updater) => {
       nodes: data.inputData.nodes,
     });
 
-    updater.complete({ outputData });
+    updater.complete({ outputData: { sourceData: outputData } });
   } catch (error) {
     updater.fail({ reasonForIncompletion: error.message, outputData: error });
   }
