@@ -14,5 +14,6 @@
   ],
   "restartable": true,
   "workflowStatusListenerEnabled": true,
-  "schemaVersion": 2
+  "schemaVersion": 2,
+  "ownerEmail": "rafaelmm@br.ibm.com"
 }

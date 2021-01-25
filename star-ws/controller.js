@@ -36,7 +36,7 @@ const saveJSONData = async data => {
     return false;
   } catch (e) {
     logger.error(`POST Request to save JSON-data intro AgroWS: ${e.message}`);
-    throw e;
+    // throw e;
   }
 };
 

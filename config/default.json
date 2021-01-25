@@ -40,14 +40,14 @@
   },
 
   "githunter-data-provider": {
-    "url": "http://localhost:3333",
+    "url": "http://githunter-data-provider.labbs.com.br",
     "endpoints": {
       "codeInfo": "/code-info"
     }
   },
 
   "star-ws": {
-    "urlData": "http://localhost:3005",
+    "urlData": "http://githunter-bind-starws.labbs.com.br",
     "endpoints": {
       "publishMetrics": "/publish/provider/:provider/node/:node",
       "jsonDataAPI": "/upload/jsondata"

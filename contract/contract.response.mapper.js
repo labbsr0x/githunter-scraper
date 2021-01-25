@@ -1,7 +1,7 @@
 const JM = require('json-mapper');
 
 const issues = JM.makeConverter({
-  ids: input => {
+  comments: input => {
     if (input && input.comments && input.comments.data) {
       return input.comments.data.map(v => v.id);
     }
@@ -12,7 +12,7 @@ const issues = JM.makeConverter({
 });
 
 const pulls = JM.makeConverter({
-  ids: input => {
+  comments: input => {
     if (input && input.comments && input.comments.data) {
       return input.comments.data.map(v => v.id);
     }

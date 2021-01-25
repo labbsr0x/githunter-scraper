@@ -10,20 +10,24 @@ class Http {
 
     this.service = axios.create({
       url,
-      timeout: 120000,
+      timeout: 800000,
       headers,
     });
 
+    this.accessToken = '';
     if (accessToken) {
-      this.addAccessToken(accessToken);
+      this.accessToken = accessToken;
     }
+
+    this.service.interceptors.request.use(config => {
+      if (this.accessToken)
+        config.headers.Authorization = `Bearer ${this.accessToken}`;
+      return config;
+    });
   }
 
   addAccessToken(accessToken) {
-    this.service.interceptors.request.use(config => {
-      config.headers.common.Authorization = `Bearer ${accessToken}`;
-      return config;
-    });
+    this.accessToken = accessToken;
   }
 
   get(path, params, headers) {
