@@ -40,7 +40,7 @@ const readInformation = async (node, sourceData) => {
     arrayData = [response];
   }
 
-  Object.values(arrayData).forEach((theData) => {
+  Object.values(arrayData).forEach(theData => {
     normalizedData.push({
       ...theData,
       ...sourceData,
