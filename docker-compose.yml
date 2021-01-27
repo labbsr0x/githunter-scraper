@@ -25,7 +25,7 @@ services:
     image: conductor-server
     environment:
       - DYNOMITE_HOSTS=dynomite:8102:us-east-1c
-      - ELASTICSEARCH_URL=elasticsearch:9300
+      - ELASTICSEARCH_URL=http://elasticblast:8200/
       - LOADSAMPLE=false
       - PROVISIONING_UPDATE_EXISTING_TASKS=false
     ports:
@@ -50,16 +50,21 @@ services:
     networks:
       - githunter-net
 
-  elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.8
-    environment:
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-      - transport.host=0.0.0.0
-      - discovery.type=single-node
-      - xpack.security.enabled=false
+  elasticblast:
+    image: flaviostutz/elasticblast
+    restart: always
     ports:
-      - 9200:9200
-      - 9300:9300
+      - 8200:8200
+    environment:
+      - LOG_LEVEL=info
+      - BLAST_URL=http://blast:6000
+    networks:
+      - githunter-net
+
+  blast:
+    image: flaviostutz/blast-indexer
+    ports:
+      - 6000:6000
     networks:
       - githunter-net
 
