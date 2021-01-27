@@ -9,7 +9,7 @@ const httpClient = new HttpClient({
 });
 
 const publishMetrics = async (provider, node, data, createRawData = false) => {
-  let endPoint = starwsConfig.endpoints.publishMetrics + `?createRawData=${createRawData}`;
+  let endPoint = `${starwsConfig.endpoints.publishMetrics}?createRawData=${createRawData}`;
 
   const route = new Route(endPoint);
   endPoint = route.reverse({ provider, node });
