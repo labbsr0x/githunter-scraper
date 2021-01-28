@@ -1,7 +1,7 @@
 [
   {
-    "name": "scraper_comments",
-    "taskType": "scraper_comments",
+    "name": "crawler",
+    "taskType": "crawler",
     "retryCount": 3,
     "timeoutSeconds": 3600,
     "timeoutPolicy": "TIME_OUT_WF",

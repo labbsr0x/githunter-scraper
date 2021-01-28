@@ -1,0 +1,90 @@
+const logger = require('../../../config/logger');
+const githunterApi = require('../../../githunter-api/controller');
+
+const nodesSource = {
+  pulls: githunterApi.getRepositoryPullsRequest,
+  issues: githunterApi.getRepositoryIssues,
+  commits: githunterApi.getRepositoryCommits,
+  userStats: githunterApi.getUserStats,
+  comments: githunterApi.getComments,
+};
+
+const validate = input => {
+  if (!input) return false;
+
+  if (!input.node) return false;
+
+  if (!input[input.node]) return false;
+
+  return true;
+};
+
+const task = async (data, updater) => {
+  try {
+    logger.info(
+      `CONDUCTOR -> Load Data from GitHunter Data Feed: Start task ${data.taskType}`,
+    );
+
+    if (!validate(data.inputData)) {
+      throw new Error('Missing input fields.');
+    }
+
+    const node = data.inputData.node;
+    const listOfRepositories = data.inputData[node];
+
+    logger.info('Loading data from githunter-data-feed');
+    const rawDataPromise = [];
+    listOfRepositories.forEach((repo, index) => {
+      rawDataPromise[index] = nodesSource[node](repo);
+    });
+
+    const rawDataValues = await Promise.all(rawDataPromise);
+
+    const fails = [];
+    const normalizedData = [];
+    rawDataValues.map((d, index) => {
+      if (!d || (d.data && d.data.length === 0)) {
+        fails.push(listOfRepositories[index]);
+        return false;
+      }
+
+      // Sometimes the return is not an array
+      let arrayData = [];
+      if (d.data && Array.isArray(d.data)) {
+        arrayData = d.data;
+      } else if (!d.data && !Array.isArray(d)) {
+        arrayData = [d];
+      }
+
+      Object.values(arrayData).forEach(theData => {
+        normalizedData.push({
+          ...theData,
+          ...listOfRepositories[index],
+          node,
+        });
+      });
+    });
+
+    const result = {
+      outputData: {},
+    };
+    result.outputData[node] = normalizedData;
+
+    if (fails.length > 0) {
+      result.outputData.fails = fails;
+    }
+
+    updater.complete(result);
+  } catch (error) {
+    updater.fail({
+      reasonForIncompletion:
+        error && error.message ? error.message : 'Unknown error.',
+      outputData:
+        error && error.response && error.response.data
+          ? error.response.data
+          : error,
+    });
+  }
+};
+
+module.exports = task;

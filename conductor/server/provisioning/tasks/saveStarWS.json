@@ -1,8 +1,8 @@
 [
   {
-    "name": "scraper_comments",
-    "taskType": "scraper_comments",
-    "retryCount": 3,
+    "name": "saveStarWS",
+    "taskType": "saveStarWS",
+    "retryCount": 0,
     "timeoutSeconds": 3600,
     "timeoutPolicy": "TIME_OUT_WF",
     "retryLogic": "FIXED",
