@@ -40,7 +40,7 @@
   },
 
   "githunter-data-provider": {
-    "url": "http://githunter-data-provider.labbs.com.br",
+    "url": "http://localhost:3333",
     "endpoints": {
       "codeInfo": "/code-info"
     }
