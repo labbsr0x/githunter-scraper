@@ -47,7 +47,7 @@
   },
 
   "star-ws": {
-    "urlData": "http://githunter-bind-starws.labbs.com.br",
+    "urlData": "http://localhost:3005",
     "endpoints": {
       "publishMetrics": "/publish/provider/:provider/node/:node",
       "jsonDataAPI": "/upload/jsondata"
