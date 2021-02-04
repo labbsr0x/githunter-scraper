@@ -5,6 +5,7 @@ const starws = require('../star-ws/controller');
 const contract = require('../contract/contract.mapper');
 const logger = require('../config/logger');
 const contractResponse = require('../contract/contract.response.mapper');
+const utils = require('../utils/index');
 
 const nodesSource = {
   pulls: githunterApi.getRepositoryPullsRequest,
@@ -94,12 +95,19 @@ const saveStarWS = async data => {
     const theData = data[theNode];
 
     const providers = new Map();
-    theData.map(item => providers.set(item.provider, 1));
+    theData.map(item => {
+      return theNode === 'userStats'
+        ? providers.set(`${item.provider}_${item.login}`, 1)
+        : providers.set(`${item.owner}_${item.name}`, 1);
+    });
 
-    providers.forEach((v, theProvider) => {
-      const providerData = theData.filter(
-        item => item.provider === theProvider,
-      );
+    providers.forEach((_v, theProvider) => {
+      const providerData = theData.filter(item => {
+        item.dateTime = utils.dateFormat4StarWS(new Date().toISOString());
+        return theNode === 'userStats'
+          ? `${item.provider}_${item.login}` === theProvider
+          : `${item.owner}_${item.name}` === theProvider;
+      });
       if (theData && theData.length > 0)
         promissePublish.push(
           starws.publishMetrics(theProvider, theNode, providerData, true),
