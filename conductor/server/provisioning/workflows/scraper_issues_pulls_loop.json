@@ -1,0 +1,107 @@
+{
+  "name": "scraper_issues_pulls_loop",
+  "description": "Scraps Issues/Pulls from repositories using loop",
+  "version": 1,
+  "tasks": [
+    {
+      "name": "crawler",
+      "taskReferenceName": "task_crawler",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "scraperPoint": "${workflow.input.scraperPoint}",
+        "node": "${workflow.input.node}"
+      }
+    },
+    {
+      "name": "loadDataFeed",
+      "taskReferenceName": "task_load_data_feed",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "issues": "${task_crawler.output.issues}",
+        "pulls": "${task_crawler.output.pulls}",
+        "node": "${workflow.input.node}"
+      }
+    },
+    {
+      "name": "loopSaveJSONData",
+      "taskReferenceName": "loop_save_json_data",
+      "type": "DO_WHILE",
+      "inputParameters": {
+        "value": 3
+      },
+      "loopCondition": "if ( ($.loop_save_json_data['iteration'] < $.value ) || ( $.task_save_json_data['response']['fails'].length == 0)) { true; } else { false; }",
+      "loopOver": [
+        {
+          "name": "saveJSONData",
+          "taskReferenceName": "task_save_json_data",
+          "type": "SIMPLE",
+          "inputParameters": {
+            "issues": "${task_load_data_feed.output.issues}",
+            "pulls": "${task_load_data_feed.output.pulls}",
+            "node": "${workflow.input.node}",
+            "fails": "${task_save_json_data.output.fails}",
+            "done": "${task_save_json_data.output.done}"
+          }
+        }
+      ],
+      "startDelay": 5,
+      "optional": false
+    },
+    {
+      "name": "loopSaveStarWSData",
+      "taskReferenceName": "loop_save_starws",
+      "type": "DO_WHILE",
+      "inputParameters": {
+        "value": 3
+      },
+      "loopCondition": "if ( ($.loop_save_starws['iteration'] < $.value ) || ( $.task_save_starws['response']['fails'].length == 0)) { false; } else { true; }",
+      "loopOver": [
+        {
+          "name": "saveStarWS",
+          "taskReferenceName": "task_save_starws",
+          "type": "SIMPLE",
+          "inputParameters": {
+            "issues": "${loop_save_starws.task_save_json_data.output.issues}",
+            "pulls": "${loop_save_starws.task_save_json_data.output.pulls}",
+            "node": "${workflow.input.node}",
+            "fails": "${loop_save_starws.task_save_json_data.output.fails}"
+          }
+        }
+      ],
+      "startDelay": 5,
+      "optional": false
+    },
+    {
+      "name": "mapperOutput",
+      "taskReferenceName": "task_mapper_output",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "comments": "${loop_save_json_data.task_save_json_data.output.comments}",
+        "node": "comments"
+      }
+    },
+    {
+      "name": "saveJSONData",
+      "taskReferenceName": "task_save_json_data_comments",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "comments": "${task_mapper_output.output.comments}",
+        "node": "comments"
+      }
+    },
+    {
+      "name": "saveStarWS",
+      "taskReferenceName": "task_save_starws_comments",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "comments": "${task_save_json_data_comments.output.comments}",
+        "node": "comments",
+        "fails": "${task_save_json_data_comments.output.fails}"
+      }
+    }
+  ],
+  "restartable": true,
+  "workflowStatusListenerEnabled": true,
+  "schemaVersion": 2,
+  "ownerEmail": "rafaelmm@br.ibm.com"
+}

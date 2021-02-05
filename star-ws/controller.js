@@ -21,7 +21,7 @@ const publishMetrics = async (provider, node, data, createRawData = false) => {
   } catch (e) {
     logger.error(`POST Request to save data intro AgroWS: ${e.message}`);
     logger.error(`%j`, e);
-    throw e;
+    return e;
   }
 };
 

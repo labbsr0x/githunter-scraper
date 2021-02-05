@@ -25,48 +25,43 @@ const task = async (data, updater) => {
 
     // Build the response
     const mappedData = {};
-    const mappedObj = [];
-    dataToMapper.forEach(node => {
-      mappedData[node] = data[node].map(item => {
-        const mapper = contractResponse[node];
-        if (mapper) {
-          return mapper({ ...item, node });
-        }
-        return {};
-      });
+    mappedData[node] = dataToMapper.map(item => {
+      const mapper = contractResponse[node];
+      if (mapper) {
+        return mapper({ ...item, node });
+      }
+      return {};
+    });
 
-      // Transform an array of object in object of array grouping by keys
-      const mergedObj = {};
-      mappedData[node].map(item => {
-        Object.keys(item).map(val => {
-          mergedObj[val] =
-            mergedObj[val] && mergedObj[val].length > 0
-              ? _.concat(mergedObj[val], item[val])
-              : item[val];
-          return val;
-        });
-        return item;
+    // Transform an array of object in object of array grouping by keys
+    const mergedObj = {};
+    mappedData[node].map(item => {
+      Object.keys(item).map(val => {
+        mergedObj[val] =
+          mergedObj[val] && mergedObj[val].length > 0
+            ? _.concat(mergedObj[val], item[val])
+            : item[val];
+        return val;
       });
+      return item;
+    });
 
-      // Removing empty values and duplicated values (if array has one item, remove from array)
-      Object.keys(mergedObj).map(key => {
-        mergedObj[key] = _.compact(mergedObj[key]);
-        mergedObj[key] = _.uniqBy(mergedObj[key]);
-        if (Array.isArray(mergedObj[key]) && mergedObj[key].length === 1) {
-          // eslint-disable-next-line prefer-destructuring
-          mergedObj[key] = mergedObj[key][0];
-        }
-        return key;
-      });
-
-      mappedObj.push(mergedObj);
+    // Removing empty values and duplicated values (if array has one item, remove from array)
+    Object.keys(mergedObj).map(key => {
+      mergedObj[key] = _.compact(mergedObj[key]);
+      mergedObj[key] = _.uniqBy(mergedObj[key]);
+      if (Array.isArray(mergedObj[key]) && mergedObj[key].length === 1) {
+        // eslint-disable-next-line prefer-destructuring
+        mergedObj[key] = mergedObj[key][0];
+      }
+      return key;
     });
 
     const result = {
       outputData: {},
     };
 
-    result.outputData = mappedObj;
+    result.outputData = mergedObj;
 
     updater.complete(result);
   } catch (error) {
