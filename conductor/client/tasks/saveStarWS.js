@@ -1,5 +1,6 @@
 const logger = require('../../../config/logger');
 const starws = require('../../../star-ws/controller');
+const utils = require('../../../utils');
 
 const validate = input => {
   if (!input) return false;
@@ -14,8 +15,7 @@ const validate = input => {
 const task = async (data, updater) => {
   try {
     logger.info(
-      `CONDUCTOR -> Save Data in StarWS: Start task ${data.taskType} with input: %j`,
-      data.inputData,
+      `CONDUCTOR -> Save Data in StarWS: Start task ${data.taskType}`,
     );
 
     if (!validate(data.inputData)) {
@@ -33,24 +33,50 @@ const task = async (data, updater) => {
     logger.info('Save data in StarWS');
     const promissePublish = [];
     const providers = new Map();
-    dataToBeSaved.map(item => providers.set(item.provider, 1));
+    dataToBeSaved.map(item => {
+      return node === 'userStats'
+        ? providers.set(`${item.provider}_${item.login}`, 1)
+        : providers.set(`${item.owner}_${item.name}`, 1);
+    });
 
     providers.forEach((v, theProvider) => {
-      const providerData = dataToBeSaved.filter(
-        item => item.provider === theProvider,
-      );
+      const providerData = dataToBeSaved.filter(item => {
+        item.dateTime = utils.dateFormat4StarWS(new Date().toISOString());
+        return node === 'userStats'
+          ? `${item.provider}_${item.login}` === theProvider
+          : `${item.owner}_${item.name}` === theProvider;
+      });
       if (dataToBeSaved && dataToBeSaved.length > 0)
         promissePublish.push(
           starws.publishMetrics(theProvider, node, providerData),
         );
     });
+
+    const failsResponse = [];
     const endPromisse = await Promise.all(promissePublish);
     const errorRequest = endPromisse.filter((resp, index) => {
-      if (resp && resp.status && resp.status !== 201) {
-        fails.push(dataToBeSaved[index]);
-        return true;
+      if (
+        (resp && resp.status && resp.status === 201) ||
+        (resp && resp.status && resp.status === 409)
+      ) {
+        return false;
       }
-      return false;
+      fails.push(dataToBeSaved[index]);
+      const r = {};
+      r.status =
+        resp && resp.response && resp.response.status
+          ? resp.response.status
+          : 501;
+      r.statusText =
+        resp && resp.response && resp.response.statusText
+          ? resp.response.statusText
+          : 'Unknown';
+      r.message =
+        resp && resp.response && resp.response.data && resp.response.data.message
+          ? resp.response.data.message
+          : 'Unknown';
+      failsResponse.push(r);
+      return true;
     });
 
     const result = {
@@ -59,6 +85,7 @@ const task = async (data, updater) => {
 
     if (errorRequest && errorRequest.length > 0) {
       result.outputData.fails = fails;
+      result.outputData.failsResponse = failsResponse;
     }
 
     updater.complete(result);

@@ -1,0 +1,23 @@
+{
+    "server": {
+      "url": "0.0.0.0",
+      "port": 3002
+    },
+  
+    "conductor": {
+      "url": "http://gh-conductor-server:8080/api/"
+    },
+  
+    "githunter": {
+      "url": "http://githunter-data-feed:3001"
+    },
+  
+    "star-ws": {
+      "urlData": "http://starws:3005"
+    },
+  
+    "githunter-data-provider": {
+      "url": "http://data-provider:3333"
+    }
+  }
+  

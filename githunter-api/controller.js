@@ -86,7 +86,7 @@ const sendGetToGithunter = async (path, data) => {
 
     if (!accessToken) {
       const msg =
-        'Githunter-API: No token available for consume githunter API.';
+        'Githunter-API: No token available for consume (GET) githunter API.';
       logger.error(msg);
       throw new Error(msg);
     }
@@ -117,7 +117,7 @@ const sendPostToGithunter = async (path, data, body) => {
 
     if (!accessToken) {
       const msg =
-        'Githunter-API: No token available for consume githunter API.';
+        'Githunter-API: No token available for consume (POST) githunter API.';
       logger.error(msg);
       throw new Error(msg);
     }
@@ -170,10 +170,10 @@ const getUserStats = async params => {
 };
 
 const getComments = async params => {
-  const { ids } = params;
-  delete params.ids;
+  const { comments } = params;
+  delete params.comments;
   return sendPostToGithunter(githunterConfig.endpoints.comments, params, {
-    ids,
+    ids: comments,
   });
 };
 
