@@ -1,0 +1,48 @@
+{
+    "name": "scraper_commits",
+    "description": "Scraps Commits data from repositories",
+    "version": 1,
+    "tasks": [
+      {
+        "name": "crawler",
+        "taskReferenceName": "task_crawler",
+        "type": "SIMPLE",
+        "inputParameters": {
+          "scraperPoint": "${workflow.input.scraperPoint}",
+          "node": "${workflow.input.node}"
+        }
+      },
+      {
+        "name": "loadDataFeed",
+        "taskReferenceName": "task_load_data_feed",
+        "type": "SIMPLE",
+        "inputParameters": {
+          "commits": "${task_crawler.output.commits}",
+          "node": "${workflow.input.node}"
+        }
+      },
+      {
+        "name": "saveJSONData",
+        "taskReferenceName": "task_save_json_data",
+        "type": "SIMPLE",
+        "inputParameters": {
+          "commits": "${task_load_data_feed.output.commits}",
+          "node": "${workflow.input.node}"
+        }
+      },
+      {
+        "name": "saveStarWS",
+        "taskReferenceName": "task_save_starws",
+        "type": "SIMPLE",
+        "inputParameters": {
+          "commits": "${task_save_json_data.output.commits}",
+          "node": "${workflow.input.node}"
+        }
+      }
+    ],
+    "restartable": true,
+    "workflowStatusListenerEnabled": true,
+    "schemaVersion": 2,
+    "ownerEmail": "rafaelmm@br.ibm.com"
+  }
+  

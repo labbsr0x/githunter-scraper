@@ -22,7 +22,6 @@
         "node": "${workflow.input.node}"
       }
     },
-
     {
       "name": "saveJSONData",
       "taskReferenceName": "task_save_json_data",

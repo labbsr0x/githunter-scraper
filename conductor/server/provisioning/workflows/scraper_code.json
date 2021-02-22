@@ -1,0 +1,38 @@
+{
+  "name": "scraper_code",
+  "description": "Scraps Code data from repositories",
+  "version": 1,
+  "tasks": [
+    {
+      "name": "crawler",
+      "taskReferenceName": "task_crawler",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "scraperPoint": "${workflow.input.scraperPoint}",
+        "node": "${workflow.input.node}"
+      }
+    },
+    {
+      "name": "loadDataFeed",
+      "taskReferenceName": "task_load_data_feed",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "code": "${task_crawler.output.code}",
+        "node": "${workflow.input.node}"
+      }
+    },
+    {
+      "name": "saveMongo",
+      "taskReferenceName": "task_save_mongo",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "code": "${task_load_data_feed.output.code}",
+        "node": "${workflow.input.node}"
+      }
+    }
+  ],
+  "restartable": true,
+  "workflowStatusListenerEnabled": true,
+  "schemaVersion": 2,
+  "ownerEmail": "rafaelmm@br.ibm.com"
+}

@@ -1,11 +1,6 @@
+const _ = require('lodash');
 const logger = require('../../../config/logger');
-const githunterDataProvider = require('../../../githunter-data-provider');
 const contract = require('../../../contract/contract.mapper');
-
-const mongoSource = {
-  code: githunterDataProvider.saveCodeInfo,
-  user: githunterDataProvider.saveUserData,
-};
 
 const validate = input => {
   if (!input) return false;
@@ -19,28 +14,30 @@ const validate = input => {
 
 const task = async (data, updater) => {
   try {
-    logger.info(
-      `CONDUCTOR -> Load Data from GitHunter Data Feed: Start task ${data.taskType}`,
-    );
+    logger.info(`CONDUCTOR -> Mapper User Data: Start task ${data.taskType}`);
 
     if (!validate(data.inputData)) {
       throw new Error('Missing input fields.');
     }
 
     const node = data.inputData.node;
-    const listOfRepositories = data.inputData[node];
+    const dataToMapper = data.inputData[node];
 
-    const maker = contract[node];
-
-    listOfRepositories.map((data, index) => {
-      if (!data) return;
-      const normalizedData = maker({
-        ...data,
-      });
-      mongoSource[node](normalizedData); //TODO: Add it in array to Promise.all
+    // Build the response
+    const mappedData = {};
+    mappedData[node] = dataToMapper.map(item => {
+      const mapper = contract[node];
+      if (mapper) {
+        return mapper({ ...item, node });
+      }
+      return {};
     });
 
-    const result = {};
+    const result = {
+      outputData: {},
+    };
+
+    result.outputData = mappedData;
 
     updater.complete(result);
   } catch (error) {

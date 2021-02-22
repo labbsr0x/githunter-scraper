@@ -1,0 +1,16 @@
+[
+  {
+    "name": "mapperUserData",
+    "taskType": "mapperUserData",
+    "retryCount": 3,
+    "timeoutSeconds": 3600,
+    "timeoutPolicy": "TIME_OUT_WF",
+    "retryLogic": "FIXED",
+    "retryDelaySeconds": 30,
+    "responseTimeoutSeconds": 1200,
+    "concurrentExecLimit": 100,
+    "rateLimitFrequencyInSeconds": 60,
+    "rateLimitPerFrequency": 50,
+    "ownerEmail": "rafaelmm@br.ibm.com"
+  }
+]
