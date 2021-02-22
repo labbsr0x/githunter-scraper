@@ -7,7 +7,9 @@ const nodesSource = {
   issues: githunterApi.getRepositoryIssues,
   commits: githunterApi.getRepositoryCommits,
   userStats: githunterApi.getUserStats,
+  userScore: githunterApi.getUserScore,
   comments: githunterApi.getComments,
+  code: githunterApi.getCodePageInformation,
 };
 
 const validate = input => {

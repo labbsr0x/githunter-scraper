@@ -19,6 +19,7 @@
       "issues": "/v1/issues",
       "organizationMembers": "/v1/organization/members",
       "userStats": "/v1/user/stats",
+      "userScore": "/v1/userscore",
       "comments": "/v1/comments"
     },
     "github": {
@@ -42,7 +43,8 @@
   "githunter-data-provider": {
     "url": "http://localhost:3333",
     "endpoints": {
-      "codeInfo": "/code-info"
+      "codeInfo": "/code-info",
+      "userScore": "/users"
     }
   },
 

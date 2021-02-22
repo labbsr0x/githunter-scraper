@@ -31,6 +31,18 @@ const code = JM.makeConverter({
   type: JM.helpers.def('codePageInfo'),
 });
 
+const user = JM.makeConverter({
+  name: 'name',
+  login: 'login',
+  provider: 'provider',
+  avatarUrl: 'avatarUrl',
+  company: 'company',
+  organizations: 'organizations',
+  followers: 'followers',
+  ownedRepositories: 'ownedRepositories',
+});
+
 module.exports = {
   code,
+  user,
 };

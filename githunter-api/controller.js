@@ -177,6 +177,10 @@ const getComments = async params => {
   });
 };
 
+const getUserScore = async params => {
+  return sendGetToGithunter(githunterConfig.endpoints.userScore, params);
+};
+
 module.exports = {
   getCodePageInformation,
   getRepositoryCommits,
@@ -185,4 +189,5 @@ module.exports = {
   getOrganizationMembers,
   getUserStats,
   getComments,
+  getUserScore,
 };

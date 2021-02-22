@@ -12,17 +12,37 @@ const saveCodeInfo = async data => {
     const response = await httpClient.post(configFeed.endpoints.codeInfo, data);
 
     if (response && response.data) {
-      logger.debug(`POST Request to Githunter-Data-Provider successfully!`);
+      logger.debug(`POST Request to Save Code successfully!`);
       return response.data;
     }
 
     return null;
   } catch (err) {
-    logger.error(`POST Request to Githunter-Data-Provider: ${err.message}`);
+    logger.error(`POST Request to Save Code: ${err.message}`);
+    throw err;
+  }
+};
+
+const saveUserData = async data => {
+  try {
+    const response = await httpClient.post(
+      configFeed.endpoints.userScore,
+      data,
+    );
+
+    if (response && response.data) {
+      logger.debug(`POST Request to Save User successfully!`);
+      return response.data;
+    }
+
+    return null;
+  } catch (err) {
+    logger.error(`POST Request to Save User: ${err.message}`);
     throw err;
   }
 };
 
 module.exports = {
   saveCodeInfo,
+  saveUserData,
 };

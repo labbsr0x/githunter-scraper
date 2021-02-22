@@ -1,0 +1,244 @@
+{
+  "name": "scraper_user_stats",
+  "description": "Scraps User data and User repos contribued",
+  "version": 1,
+  "tasks": [
+    {
+      "name": "crawler",
+      "taskReferenceName": "task_crawler",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "scraperPoint": "${workflow.input.scraperPoint}",
+        "node": "userScore",
+        "organization": "${workflow.input.organization}",
+        "provider": "${workflow.input.provider}"
+      }
+    },
+    {
+      "name": "loadDataFeed",
+      "taskReferenceName": "task_load_data_feed",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "userScore": "${task_crawler.output.userScore}",
+        "node": "userScore",
+        "provider": "${workflow.input.provider}"
+      }
+    },
+    {
+      "name": "formatUserData",
+      "taskReferenceName": "task_format_user_data",
+      "type": "SIMPLE",
+      "inputParameters": {
+        "user": "${task_load_data_feed.output.userScore}",
+        "node": "user",
+        "provider": "${workflow.input.provider}"
+      }
+    },
+    {
+      "name": "fork_join",
+      "taskReferenceName": "fork_user_stats",
+      "type": "FORK_JOIN",
+      "forkTasks": [
+        [
+          {
+            "name": "saveJSONData",
+            "taskReferenceName": "task_save_json_data_issues",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "issues": "${task_format_user_data.output.issues}",
+              "node": "issues"
+            }
+          },
+          {
+            "name": "saveStarWS",
+            "taskReferenceName": "task_save_starws_issues",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "issues": "${task_save_json_data_issues.output.issues}",
+              "node": "issues"
+            }
+          },
+          {
+            "name": "mapperOutput",
+            "taskReferenceName": "task_mapper_output_issues",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "issues": "${task_save_json_data_issues.output.issues}",
+              "node": "issues"
+            }
+          },
+          {
+            "name": "loadDataFeed",
+            "taskReferenceName": "task_load_data_feed_comments_issues",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "comments": "${task_mapper_output_issues.output.comments}",
+              "node": "comments",
+              "source": "issues",
+              "provider": "${task_mapper_output_issues.output.provider}",
+              "type": "${task_mapper_output_issues.output.type}",
+              "bulk": 100
+            }
+          },
+          {
+            "name": "saveJSONData",
+            "taskReferenceName": "task_save_json_data_comments_issues",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "comments": "${task_load_data_feed_comments_issues.output.comments}",
+              "node": "comments"
+            }
+          },
+          {
+            "name": "saveStarWS",
+            "taskReferenceName": "task_save_starws_comments_issues",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "comments": "${task_save_json_data_comments_issues.output.comments}",
+              "node": "comments"
+            }
+          }
+        ],
+        [
+          {
+            "name": "saveJSONData",
+            "taskReferenceName": "task_save_json_data_pulls",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "pulls": "${task_format_user_data.output.pulls}",
+              "node": "pulls"
+            }
+          },
+          {
+            "name": "saveStarWS",
+            "taskReferenceName": "task_save_starws_pulls",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "pulls": "${task_save_json_data_pulls.output.pulls}",
+              "node": "pulls"
+            }
+          },
+          {
+            "name": "mapperOutput",
+            "taskReferenceName": "task_mapper_output_pulls",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "pulls": "${task_save_json_data_pulls.output.pulls}",
+              "node": "pulls"
+            }
+          },
+          {
+            "name": "loadDataFeed",
+            "taskReferenceName": "task_load_data_feed_comments_pulls",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "comments": "${task_mapper_output_pulls.output.comments}",
+              "node": "comments",
+              "source": "pulls",
+              "provider": "${task_mapper_output_pulls.output.provider}",
+              "type": "${task_mapper_output_pulls.output.type}",
+              "bulk": 100
+            }
+          },
+          {
+            "name": "saveJSONData",
+            "taskReferenceName": "task_save_json_data_comments_pulls",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "comments": "${task_load_data_feed_comments_pulls.output.comments}",
+              "node": "comments"
+            }
+          },
+          {
+            "name": "saveStarWS",
+            "taskReferenceName": "task_save_starws_comments_pulls",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "comments": "${task_save_json_data_comments_pulls.output.comments}",
+              "node": "comments"
+            }
+          }
+        ],
+        [
+          {
+            "name": "loadDataFeed",
+            "taskReferenceName": "task_load_data_feed_commits",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "commits": "${task_format_user_data.output.commits}",
+              "node": "commits"
+            }
+          },
+          {
+            "name": "saveJSONData",
+            "taskReferenceName": "task_save_json_data_commits",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "commits": "${task_load_data_feed_commits.output.commits}",
+              "node": "commits"
+            }
+          },
+          {
+            "name": "saveStarWS",
+            "taskReferenceName": "task_save_starws",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "commits": "${task_save_json_data_commits.output.commits}",
+              "node": "commits"
+            }
+          }
+        ],
+        [
+          {
+            "name": "loadDataFeed",
+            "taskReferenceName": "task_load_data_feed_code",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "code": "${task_format_user_data.output.code}",
+              "node": "code"
+            }
+          },
+          {
+            "name": "saveMongo",
+            "taskReferenceName": "task_save_mongo_code",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "code": "${task_load_data_feed_code.output.code}",
+              "node": "code"
+            }
+          }
+        ],
+        [
+          {
+            "name": "mapperUserData",
+            "taskReferenceName": "task_mapper_user_data",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "user": "${task_load_data_feed.output.userScore}",
+              "node": "user"
+            }
+          },
+          {
+            "name": "saveMongo",
+            "taskReferenceName": "task_save_mongo_user",
+            "type": "SIMPLE",
+            "inputParameters": {
+              "user": "${task_mapper_user_data.output.user}",
+              "node": "user"
+            }
+          }
+        ]
+      ]
+    },
+    {
+      "name": "join",
+      "taskReferenceName": "j_user_stats",
+      "type": "JOIN",
+      "joinOn": []
+    }
+  ],
+  "restartable": true,
+  "workflowStatusListenerEnabled": true,
+  "schemaVersion": 2,
+  "ownerEmail": "rafaelmm@br.ibm.com"
+}
