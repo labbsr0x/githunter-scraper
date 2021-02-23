@@ -72,7 +72,10 @@ const task = async (data, updater) => {
           ? resp.response.statusText
           : 'Unknown';
       r.message =
-        resp && resp.response && resp.response.data && resp.response.data.message
+        resp &&
+        resp.response &&
+        resp.response.data &&
+        resp.response.data.message
           ? resp.response.data.message
           : 'Unknown';
       failsResponse.push(r);
@@ -86,6 +89,8 @@ const task = async (data, updater) => {
     if (errorRequest && errorRequest.length > 0) {
       result.outputData.fails = fails;
       result.outputData.failsResponse = failsResponse;
+      updater.fail(result);
+      return;
     }
 
     updater.complete(result);
