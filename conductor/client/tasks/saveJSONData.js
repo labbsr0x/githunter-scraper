@@ -70,7 +70,7 @@ const task = async (data, updater) => {
     if (fails.length > 0) {
       result.outputData.fails = fails;
       result.outputData.done = normalizedData;
-      result.reasonForIncompletion = `${fails.length} itens didn't generate JSON Data.`;
+      result.reasonForIncompletion = `${fails.length}/${listOfRepositories.length} itens didn't generate JSON Data.`;
       // TODO: When back to use LOOP, remove the fail and add the complete.
       //updater.complete(result);
       updater.fail(result);
