@@ -39,7 +39,11 @@ const task = async (data, updater) => {
     // Save JSON Data
     const rawDataPromise = [];
     dataToBeSaved.forEach((theData, index) => {
-      rawDataPromise[index] = starws.saveJSONData(theData);
+      const provider =
+        node === 'userStats'
+          ? `${theData.provider}_${theData.login}`
+          : `${theData.owner}_${theData.name}`;
+      rawDataPromise[index] = starws.saveJSONData(provider, 'json', theData);
     });
 
     const rawDataValues = await Promise.all(rawDataPromise);

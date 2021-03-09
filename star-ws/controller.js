@@ -25,8 +25,12 @@ const publishMetrics = async (provider, node, data, createRawData = false) => {
   }
 };
 
-const saveJSONData = async data => {
-  const endPoint = starwsConfig.endpoints.jsonDataAPI;
+const saveJSONData = async (provider, node, data) => {
+  let endPoint = starwsConfig.endpoints.jsonDataAPI;
+
+  const route = new Route(endPoint);
+  endPoint = route.reverse({ provider, node });
+  
   try {
     const response = await httpClient.post(endPoint, data);
     if (response.status === 200 && response.data && response.data.link) {
