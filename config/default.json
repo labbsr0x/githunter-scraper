@@ -52,7 +52,7 @@
     "urlData": "http://localhost:3005",
     "endpoints": {
       "publishMetrics": "/publish/provider/:provider/node/:node",
-      "jsonDataAPI": "/upload/jsondata"
+      "jsonDataAPI": "/upload/provider/:provider/node/:node"
     }
   },
   "logger": {
