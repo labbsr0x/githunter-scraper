@@ -68,27 +68,27 @@ services:
     networks:
       - githunter-net
 
-  mongo:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: root
-    volumes:
-      - ./data/mongo/volume:/data/db
-    ports:
-      - 27017:27017
-    networks:
-      - githunter-net
+  # mongo:
+  #   image: mongo
+  #   restart: always
+  #   environment:
+  #     MONGO_INITDB_ROOT_USERNAME: root
+  #     MONGO_INITDB_ROOT_PASSWORD: root
+  #   volumes:
+  #     - ./data/mongo/volume:/data/db
+  #   ports:
+  #     - 27017:27017
+  #   networks:
+  #     - githunter-net
 
-  scraper:
-    build: .
-    image: githunter-scraper:1.0
-    restart: always
-    ports:
-      - 3002:3002
-    networks:
-      - githunter-net
+  # scraper:
+  #   build: .
+  #   image: githunter-scraper:1.0
+  #   restart: always
+  #   ports:
+  #     - 3002:3002
+  #   networks:
+  #     - githunter-net
 
 networks:
   githunter-net:

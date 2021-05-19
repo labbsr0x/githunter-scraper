@@ -1,3 +1,3 @@
-FROM flaviostutz/conductor-server:2.12.1.5
+FROM flaviostutz/conductor-server:2.24.2.1
 
 ADD /provisioning /provisioning
