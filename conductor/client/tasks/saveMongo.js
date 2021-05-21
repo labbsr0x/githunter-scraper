@@ -27,7 +27,7 @@ const task = async (data, updater) => {
       throw new Error('Missing input fields.');
     }
 
-    const node = data.inputData.node;
+    const { node } = data.inputData;
     const listOfRepositories = data.inputData[node];
 
     const maker = contract[node];
@@ -37,7 +37,7 @@ const task = async (data, updater) => {
       const normalizedData = maker({
         ...data,
       });
-      mongoSource[node](normalizedData); //TODO: Add it in array to Promise.all
+      mongoSource[node](normalizedData); // TODO: Add it in array to Promise.all
     });
 
     const result = {};

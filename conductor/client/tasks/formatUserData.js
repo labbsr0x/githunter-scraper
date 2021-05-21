@@ -20,8 +20,8 @@ const task = async (data, updater) => {
       throw new Error('Missing input fields.');
     }
 
-    const node = data.inputData.node;
-    const provider = data.inputData.provider;
+    const { node } = data.inputData;
+    const { provider } = data.inputData;
     const dataToMapper = data.inputData[node];
 
     // Build the response

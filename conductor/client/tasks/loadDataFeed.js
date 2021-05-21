@@ -32,9 +32,9 @@ const task = async (data, updater) => {
       throw new Error('Missing input fields.');
     }
 
-    const node = data.inputData.node;
+    const { node } = data.inputData;
     const listOfRepositories = data.inputData[node];
-    const provider = data.inputData.provider;
+    const { provider } = data.inputData;
     const bulk = data.inputData.bulk ? data.inputData.bulk : false;
 
     logger.info('Loading data from githunter-data-feed');
@@ -93,7 +93,7 @@ const task = async (data, updater) => {
       // TODO: When back to use LOOP, remove the fail and add the complete.
       result.outputData.done = normalizedData;
       result.reasonForIncompletion = `${fails.length} itens didn't load Data.`;
-      //updater.complete(result);
+      // updater.complete(result);
       updater.fail(result);
     }
 

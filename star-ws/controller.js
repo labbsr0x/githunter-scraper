@@ -30,7 +30,7 @@ const saveJSONData = async (provider, node, data) => {
 
   const route = new Route(endPoint);
   endPoint = route.reverse({ provider, node });
-  
+
   try {
     const response = await httpClient.post(endPoint, data);
     if (response.status === 200 && response.data && response.data.link) {

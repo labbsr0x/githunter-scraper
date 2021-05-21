@@ -25,7 +25,7 @@ const task = async (data, updater) => {
     let dataToBeSaved;
     let isRetry = false;
     const fails = [];
-    const node = data.inputData.node;
+    const { node } = data.inputData;
     const listOfRepositories = data.inputData[node];
 
     if (data.inputData.fails && data.inputData.fails.length) {
@@ -76,7 +76,7 @@ const task = async (data, updater) => {
       result.outputData.done = normalizedData;
       result.reasonForIncompletion = `${fails.length}/${listOfRepositories.length} itens didn't generate JSON Data.`;
       // TODO: When back to use LOOP, remove the fail and add the complete.
-      //updater.complete(result);
+      // updater.complete(result);
       updater.fail(result);
       return;
     }

@@ -22,7 +22,7 @@ const task = async (data, updater) => {
       throw new Error('Missing input fields.');
     }
 
-    const node = data.inputData.node;
+    const { node } = data.inputData;
     let dataToBeSaved = data.inputData[node];
     const fails = [];
 
