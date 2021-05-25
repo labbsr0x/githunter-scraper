@@ -11,7 +11,7 @@
   },
 
   "githunter": {
-    "url": "http://localhost:3001",
+    "url": "https://githunter-data-feed-r3.labbs.com.br",
     "endpoints": {
       "codePageInfo": "/v1/code",
       "commits": "/v1/commits",
@@ -41,7 +41,7 @@
   },
 
   "githunter-data-provider": {
-    "url": "http://localhost:3333",
+    "url": "https://githunter-data-provider-r3.labbs.com.br",
     "endpoints": {
       "codeInfo": "/code-info",
       "userScore": "/users"
@@ -49,7 +49,7 @@
   },
 
   "star-ws": {
-    "urlData": "http://localhost:3005",
+    "urlData": "https://githunter-bind-starws-r3.labbs.com.br",
     "endpoints": {
       "publishMetrics": "/publish/provider/:provider/node/:node",
       "jsonDataAPI": "/upload/provider/:provider/node/:node"
