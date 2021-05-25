@@ -6,16 +6,10 @@ Githunter-Scraper is a tool for scraper some public information about repositori
 
 ### Run locally
 
-After clone this repository, execute this command on terminal:
+You can run locally using the script startup.sh" present int the root of the application:
 
-```bash
-npm install
 ```
-
-So on, run a command line like this:
-
-```bash
-node githunter-scraper.js --scraperPoint trending --provider github --nodes issuesV1
+./startup.sh
 ```
 
 > **scraperPoint** (required): It is the start point, from where the script should get the repositories to be scraper. For _trending_ means that will crawl the github explore page, in trending tab.
